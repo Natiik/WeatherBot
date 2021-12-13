@@ -10,6 +10,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new WeatherBot());
+
+
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
