@@ -39,6 +39,7 @@ class WeatherBot extends TelegramLongPollingCommandBot {
                         "\nСкорость ветра "+ response.getWind().getSpeed()+" м/с"+
                         "\nВосход солнца: " + DateConvertorT.toNormal(response.getSys().getSunrise())+
                         "\nЗакат солнца: " + DateConvertorT.toNormal(response.getSys().getSunset());
+
                 message.setText(answer);
                 try {
                     execute(message);
