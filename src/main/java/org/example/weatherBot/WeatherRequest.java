@@ -1,5 +1,6 @@
 package org.example.weatherBot;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.*;
+
 
 class WeatherRequest {
     private static HttpClient http = HttpClient.newBuilder()
@@ -25,31 +27,20 @@ class WeatherRequest {
                 .setHeader("User-Agent", "Java 11 HttpClient Bot")
                 .build();
         HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-        HashMap<String, String> result =
-                (HashMap<String, String>) new ObjectMapper().readValue(response.body(), HashMap.class);
-
-        getDescription(result);
+        System.out.println(response.body());
+        Response result =
+                 new ObjectMapper().readValue(response.body(), Response.class);
+        System.out.println("");
+        //getDescription(result);
 //        System.out.println( result.get("weather"));
 //        System.out.println(response.statusCode());
 
     }
 
-    protected List<String> getDescription(HashMap<String, String> map) {
-        String description = map.get("weather");
-        System.out.println(description);
-        String[] sing = {"\\[", "\\{", "]", "}"};
-        for (String value : sing) {
-            description = description.replaceAll(value, "");
-        }
-        String[] subString = description.split(", ");
-        List<String> weather = new ArrayList<>();
-        Arrays.stream(subString).forEach(s -> {
-            if (s.startsWith("description=")) {
-                weather.add(s.replaceAll("description=", ""));
-            }
-        });
-        return weather;
-
-    }
+    /*protected List<String> getDescription(HashMap map)  {
+        return ((ArrayList) map.get("weather")).stream()
+                .map(el -> ((LinkedHashMap)el).get("description"))
+                .toList();
+    }*/
 }
 
