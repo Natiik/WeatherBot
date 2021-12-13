@@ -17,5 +17,6 @@ class Response {
    private Cloud clouds;
    private SystemT sys;
    private long dt;
+   private  int timezone;
    private String name;
 }

@@ -2,6 +2,7 @@ package org.example.weatherBot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.URI;
@@ -18,7 +19,8 @@ class WeatherRequest {
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
-    protected void sendRequest() throws IOException, InterruptedException {
+    @SneakyThrows
+    protected Response sendRequest() {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
@@ -27,20 +29,8 @@ class WeatherRequest {
                 .setHeader("User-Agent", "Java 11 HttpClient Bot")
                 .build();
         HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
-        Response result =
-                 new ObjectMapper().readValue(response.body(), Response.class);
-        System.out.println("");
-        //getDescription(result);
-//        System.out.println( result.get("weather"));
-//        System.out.println(response.statusCode());
-
+        //System.out.println(response.body());
+        return new ObjectMapper().readValue(response.body(), Response.class);
     }
-
-    /*protected List<String> getDescription(HashMap map)  {
-        return ((ArrayList) map.get("weather")).stream()
-                .map(el -> ((LinkedHashMap)el).get("description"))
-                .toList();
-    }*/
 }
 
