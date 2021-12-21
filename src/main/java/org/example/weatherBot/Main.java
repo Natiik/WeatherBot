@@ -9,7 +9,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
     public static void main(String[] args) {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new WeatherBot());
+            botsApi.registerBot(new WeatherBot(new WeatherRequest()));
 
 
         } catch (TelegramApiException e) {
