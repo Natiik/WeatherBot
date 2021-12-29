@@ -7,7 +7,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class MainInfo {
+public class Info {
     private double temp;
     private double feels_like;
     private double temp_min;

@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 class Response {
    private List<Weather> weather;
-   private MainInfo main;
+   private Info main;
    private Wind wind;
    private Cloud clouds;
    private SystemT sys;

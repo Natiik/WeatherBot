@@ -1,13 +1,19 @@
 package org.example.weatherBot;
 
 
-import org.example.weatherBot.structure.Weather;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+//import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+
+//import static java.lang.Math.toIntExact;
 
 class WeatherBot extends TelegramLongPollingCommandBot {
 
@@ -31,30 +37,49 @@ class WeatherBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
+            String id = String.valueOf(update.getMessage().getChatId());
             if (update.getMessage().getText().equals("/get_weather")) {
-                SendMessage message = new SendMessage();
-                message.setChatId(String.valueOf(update.getMessage().getChatId()));
-                Response response = weatherRequest.sendRequest();
-                String answer = "Погода в городе " + response.getName() + " на " + DateConvertorT.toNormal(response.getDt()) +
-                        "\nСостояние: " + response.getWeather().stream().map(Weather::getDescription).collect(Collectors.joining(", ")) +
-                        "\nТемпература воздуха: " + (int) Math.round(response.getMain().getTemp()) + "°C" + " (ощущается как " + (int) Math.round(response.getMain().getFeels_like()) + "°C" + ")" +
-                        "\nВлажность: " + response.getMain().getHumidity() + "%" +
-                        "\nАтмосферное давление: " + response.getMain().getPressure() + " гПа" +
-                        "\nСкорость ветра " + response.getWind().getSpeed() + " м/с" +
-                        "\nВосход солнца: " + DateConvertorT.toNormal(response.getSys().getSunrise()) +
-                        "\nЗаход солнца: " + DateConvertorT.toNormal(response.getSys().getSunset());
-
-                message.setText(answer);
                 try {
-                    execute(message);
+                    execute(Message.createMessage(id, AnswerString.weatherCondition(weatherRequest.sendRequest())));
 
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
             }
+            if (update.getMessage().getText().equals("/start")) {
+                InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> buttonRows = new ArrayList<>();
+                buttonRows.add(List.of(Button.createButton("Change settings", "change_settings"),
+                                       Button.createButton("Get weather", "get_weather")));
+                markupInline.setKeyboard(buttonRows);
 
+                try {
+                    execute(Message.createMessageButton(id, AnswerString.firstString(), markupInline));
+
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (update.hasCallbackQuery()) {
+            String id = String.valueOf(update.getCallbackQuery().getMessage().getChatId());
+
+            if (update.getCallbackQuery().getData().equals("get_weather")) {
+                try {
+                    execute(Message.createMessage(id, AnswerString.weatherCondition(weatherRequest.sendRequest())));
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (update.getCallbackQuery().getData().equals("change_settings")) {
+
+                try {
+                    execute(Message.createMessage(id, AnswerString.weatherCondition(weatherRequest.sendRequest())));
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
     }
-
 }
+
