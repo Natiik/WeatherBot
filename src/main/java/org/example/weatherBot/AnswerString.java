@@ -23,4 +23,8 @@ import java.util.stream.Collectors;
     static  String firstString (){
         return "Hello! \n\nThis is WeatherBot that will help you find out about weather)\n\nDefault settings: \n\nLocation: Kyiv,Ukraine \nMeasurement system: standart (temperature :°C;  wind speed measurement: m/s)";
     }
+
+     static  String settingsString(){
+         return "Choose what you`d like to change:";
+     }
 }

@@ -29,7 +29,6 @@ class WeatherRequest {
                 .setHeader("User-Agent", "Java 11 HttpClient Bot")
                 .build();
         HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
-        //System.out.println(response.body());
         return new ObjectMapper().readValue(response.body(), Response.class);
     }
 }
