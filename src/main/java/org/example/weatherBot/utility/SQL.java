@@ -89,4 +89,26 @@ public class SQL {
         }
         return false;
     }
+
+    public static void update (String id, String column, String value){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:set.db");
+            statement = connection.createStatement();
+            String sql = "UPDATE setting SET %s = \'%s\' WHERE Id=%s;".formatted(column, value,id);
+//            System.out.println(sql);
+            statement.execute(sql);
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

@@ -79,6 +79,28 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 message = Message.createMessageButton(id, AnswerCreator.getSettingMessage(), markup);
             }
 
+            else if (update.getCallbackQuery().getData().equals("set_metrics")){
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> lists = new ArrayList<>();
+                lists.add(List.of(Button.createButton("Standard", "standard"), Button.createButton("Metric", "metric"), Button.createButton("Imperial", "imperial")));
+                markup.setKeyboard(lists);
+                message = Message.createMessageButton(id, "Temperature is measured in: \nStandard - Kelvin \nMetric - Celsius \nImperial - Fahrenheit", markup);
+            }
+
+            else if (update.getCallbackQuery().getData().equals("standard")){
+                message= Message.createMessage(id,"Metrics changed to Standard");
+                SQL.update(id,"Metrics","standard");
+            }
+
+            else if (update.getCallbackQuery().getData().equals("metric")){
+                message= Message.createMessage(id,"Metrics changed to Metric");
+                SQL.update(id,"Metrics","metric");
+            }
+
+            else if (update.getCallbackQuery().getData().equals("imperial")){
+                message= Message.createMessage(id,"Metrics changed to Imperial");
+                SQL.update(id,"Metrics","imperial");
+            }
             else {
                 message = Message.createMessage(id,"working on this feature");
             }
