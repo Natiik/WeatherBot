@@ -1,7 +1,11 @@
-package org.example.weatherBot;
+package org.example.weatherBot.bot;
 
 
 import lombok.SneakyThrows;
+import org.example.weatherBot.utility.AnswerCreator;
+import org.example.weatherBot.utility.Button;
+import org.example.weatherBot.utility.Message;
+import org.example.weatherBot.utility.SQL;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -9,17 +13,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 //import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 
-class WeatherBot extends TelegramLongPollingCommandBot {
+public class WeatherBot extends TelegramLongPollingCommandBot {
 
-    private final WeatherRequest weatherRequest;
+    private final WeatherRequester weatherRequester;
 
-    public WeatherBot(WeatherRequest weatherRequest) {
-        this.weatherRequest = weatherRequest;
+    public WeatherBot(WeatherRequester weatherRequester) {
+        this.weatherRequester = weatherRequester;
     }
 
 
@@ -41,7 +44,7 @@ class WeatherBot extends TelegramLongPollingCommandBot {
             SendMessage message;
 
             if (update.getMessage().getText().equals("/get_weather")) {
-                message = Message.createMessage(id, AnswerString.weatherCondition(weatherRequest.sendRequest()));
+                message = Message.createMessage(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()));
             }
 
             else if (update.getMessage().getText().equals("/start")) {
@@ -50,7 +53,7 @@ class WeatherBot extends TelegramLongPollingCommandBot {
                 buttonRows.add(List.of(Button.createButton("Change settings", "change_settings"),
                         Button.createButton("Get weather", "get_weather")));
                 markupInline.setKeyboard(buttonRows);
-                message = Message.createMessageButton(id, AnswerString.firstString(), markupInline);
+                message = Message.createMessageButton(id, AnswerCreator.getGreeting(), markupInline);
 
                 SQL.insertDefault(id);
             }
@@ -65,7 +68,7 @@ class WeatherBot extends TelegramLongPollingCommandBot {
             SendMessage message;
 
             if (update.getCallbackQuery().getData().equals("get_weather")) {
-                message = Message.createMessage(id, AnswerString.weatherCondition(weatherRequest.sendRequest()));
+                message = Message.createMessage(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()));
             }
 
             else if (update.getCallbackQuery().getData().equals("change_settings")) {
@@ -73,13 +76,11 @@ class WeatherBot extends TelegramLongPollingCommandBot {
                 List<List<InlineKeyboardButton>> lists = new ArrayList<>();
                 lists.add(List.of(Button.createButton("Metrics", "set_metrics"), Button.createButton("Location", "set_location"), Button.createButton("Language", "set_language")));
                 markup.setKeyboard(lists);
-                message = Message.createMessageButton(id, AnswerString.settingsString(), markup);
+                message = Message.createMessageButton(id, AnswerCreator.getSettingMessage(), markup);
             }
 
-
-
             else {
-                message = new SendMessage();
+                message = Message.createMessage(id,"working on this feature");
             }
             execute(message);
         }

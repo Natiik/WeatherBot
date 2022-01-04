@@ -1,12 +1,13 @@
-package org.example.weatherBot;
+package org.example.weatherBot.utility;
 
-import org.example.weatherBot.structure.Weather;
+import org.example.weatherBot.response.Response;
+import org.example.weatherBot.response.structure.Weather;
 
 import java.util.stream.Collectors;
 
- class AnswerString {
+public class AnswerCreator {
 
-    static String weatherCondition(Response response) {
+   public static String writeWeather(Response response) {
         String answer = """
                 Погода в городе %s на %s
                 Состояние: %s
@@ -20,11 +21,11 @@ import java.util.stream.Collectors;
         return answer;
     }
 
-    static  String firstString (){
+    public static String getGreeting() {
         return "Hello! \n\nThis is WeatherBot that will help you find out about weather)\n\nDefault settings: \n\nLocation: Kyiv,Ukraine \nMeasurement system: standart (temperature :°C;  wind speed measurement: m/s)";
     }
 
-     static  String settingsString(){
-         return "Choose what you`d like to change:";
-     }
+    public static String getSettingMessage() {
+        return "Choose what you`d like to change:";
+    }
 }

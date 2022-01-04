@@ -1,10 +1,10 @@
-package org.example.weatherBot;
+package org.example.weatherBot.utility;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-class Button {
+public class Button {
 
-    protected static InlineKeyboardButton createButton(String text, String callBack) {
+     public static InlineKeyboardButton createButton(String text, String callBack) {
         InlineKeyboardButton newButton = new InlineKeyboardButton();
         newButton.setText(text);
         newButton.setCallbackData(callBack);

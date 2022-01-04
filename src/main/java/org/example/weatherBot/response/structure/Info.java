@@ -1,4 +1,4 @@
-package org.example.weatherBot.structure;
+package org.example.weatherBot.response.structure;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

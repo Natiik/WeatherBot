@@ -1,26 +1,24 @@
-package org.example.weatherBot;
+package org.example.weatherBot.bot;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.example.weatherBot.response.Response;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.*;
 
 
-class WeatherRequest {
+public class WeatherRequester {
     private static HttpClient http = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .connectTimeout(Duration.ofSeconds(10))
             .build();
 
     @SneakyThrows
-    protected Response sendRequest() {
+    public Response sendRequest() {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
