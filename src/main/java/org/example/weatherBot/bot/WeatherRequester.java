@@ -12,7 +12,7 @@ import java.time.Duration;
 
 
 public class WeatherRequester {
-    private static HttpClient http = HttpClient.newBuilder()
+    private static final HttpClient HTTP = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .connectTimeout(Duration.ofSeconds(10))
             .build();
@@ -24,9 +24,8 @@ public class WeatherRequester {
                 .GET()
                 .uri(URI.create("https://api.openweathermap.org/data/2.5/weather?q=Kyiv&appid=a502ae541ee8f22a703632571e292a64&lang=ru&units=metric"))
                 .header("Accept", "application/json")
-                .setHeader("User-Agent", "Java 11 HttpClient Bot")
                 .build();
-        HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = HTTP.send(request, HttpResponse.BodyHandlers.ofString());
         return new ObjectMapper().readValue(response.body(), Response.class);
     }
 }

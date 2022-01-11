@@ -96,7 +96,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        org.example.weatherBot.bot.Main
+                                        org.example.weatherBot.Main
                                     </mainClass>
                                 </manifest>
                             </archive>

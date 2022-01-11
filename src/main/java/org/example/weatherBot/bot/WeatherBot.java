@@ -1,30 +1,25 @@
 package org.example.weatherBot.bot;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.example.weatherBot.utility.AnswerCreator;
-import org.example.weatherBot.utility.Button;
-import org.example.weatherBot.utility.Message;
-import org.example.weatherBot.utility.SQL;
+import org.example.weatherBot.utility.ButtonUtil;
+import org.example.weatherBot.utility.MessageUtil;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-//import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@RequiredArgsConstructor
 public class WeatherBot extends TelegramLongPollingCommandBot {
 
     private final WeatherRequester weatherRequester;
-
-    public WeatherBot(WeatherRequester weatherRequester) {
-        this.weatherRequester = weatherRequester;
-    }
-
+    private final SQL sql;
 
     @Override
     public String getBotUsername() {
@@ -43,22 +38,17 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             String id = String.valueOf(update.getMessage().getChatId());
             SendMessage message;
 
-            if (update.getMessage().getText().equals("/get_weather")) {
-                message = Message.createMessage(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()));
-            }
+            String text = update.getMessage().getText();
+            if ("/get_weather".equals(text)) {
+                message = MessageUtil.createMessage(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()));
+            } else if ("/start".equals(text)) {
+                InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup(List.of(List.of(
+                        ButtonUtil.createButton("Change settings", "change_settings"),
+                        ButtonUtil.createButton("Get weather", "get_weather"))));
+                message = MessageUtil.createMessageWithButton(id, AnswerCreator.getGreeting(), markupInline);
 
-            else if (update.getMessage().getText().equals("/start")) {
-                InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-                List<List<InlineKeyboardButton>> buttonRows = new ArrayList<>();
-                buttonRows.add(List.of(Button.createButton("Change settings", "change_settings"),
-                        Button.createButton("Get weather", "get_weather")));
-                markupInline.setKeyboard(buttonRows);
-                message = Message.createMessageButton(id, AnswerCreator.getGreeting(), markupInline);
-
-                SQL.insertDefault(id);
-            }
-
-            else {
+                sql.insertDefault(id);
+            } else {
                 message = new SendMessage();
             }
             execute(message);
@@ -66,43 +56,36 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
         } else if (update.hasCallbackQuery()) {
             String id = String.valueOf(update.getCallbackQuery().getMessage().getChatId());
             SendMessage message;
-
-            if (update.getCallbackQuery().getData().equals("get_weather")) {
-                message = Message.createMessage(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()));
-            }
-
-            else if (update.getCallbackQuery().getData().equals("change_settings")) {
-                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                List<List<InlineKeyboardButton>> lists = new ArrayList<>();
-                lists.add(List.of(Button.createButton("Metrics", "set_metrics"), Button.createButton("Location", "set_location"), Button.createButton("Language", "set_language")));
-                markup.setKeyboard(lists);
-                message = Message.createMessageButton(id, AnswerCreator.getSettingMessage(), markup);
-            }
-
-            else if (update.getCallbackQuery().getData().equals("set_metrics")){
-                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-                List<List<InlineKeyboardButton>> lists = new ArrayList<>();
-                lists.add(List.of(Button.createButton("Standard", "standard"), Button.createButton("Metric", "metric"), Button.createButton("Imperial", "imperial")));
-                markup.setKeyboard(lists);
-                message = Message.createMessageButton(id, "Temperature is measured in: \nStandard - Kelvin \nMetric - Celsius \nImperial - Fahrenheit", markup);
-            }
-
-            else if (update.getCallbackQuery().getData().equals("standard")){
-                message= Message.createMessage(id,"Metrics changed to Standard");
-                SQL.update(id,"Metrics","standard");
-            }
-
-            else if (update.getCallbackQuery().getData().equals("metric")){
-                message= Message.createMessage(id,"Metrics changed to Metric");
-                SQL.update(id,"Metrics","metric");
-            }
-
-            else if (update.getCallbackQuery().getData().equals("imperial")){
-                message= Message.createMessage(id,"Metrics changed to Imperial");
-                SQL.update(id,"Metrics","imperial");
-            }
-            else {
-                message = Message.createMessage(id,"working on this feature");
+            String data = update.getCallbackQuery().getData();
+            switch (data) {
+                case "get_weather" -> message = MessageUtil.createMessage(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()));
+                case "change_settings" -> {
+                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> lists = new ArrayList<>();
+                    lists.add(List.of(ButtonUtil.createButton("Metrics", "set_metrics"), ButtonUtil.createButton("Location", "set_location"), ButtonUtil.createButton("Language", "set_language")));
+                    markup.setKeyboard(lists);
+                    message = MessageUtil.createMessageWithButton(id, AnswerCreator.getSettingMessage(), markup);
+                }
+                case "set_metrics" -> {
+                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> lists = new ArrayList<>();
+                    lists.add(List.of(ButtonUtil.createButton("Standard", "standard"), ButtonUtil.createButton("Metric", "metric"), ButtonUtil.createButton("Imperial", "imperial")));
+                    markup.setKeyboard(lists);
+                    message = MessageUtil.createMessageWithButton(id, "Temperature is measured in: \nStandard - Kelvin \nMetric - Celsius \nImperial - Fahrenheit", markup);// TODO
+                }
+                case "standard" -> {
+                    message = MessageUtil.createMessage(id, "Metrics changed to Standard");
+                    sql.update(id, "Metrics", "standard");
+                }
+                case "metric" -> {
+                    message = MessageUtil.createMessage(id, "Metrics changed to Metric");
+                    sql.update(id, "Metrics", "metric");
+                }
+                case "imperial" -> {
+                    message = MessageUtil.createMessage(id, "Metrics changed to Imperial");
+                    sql.update(id, "Metrics", "imperial");
+                }
+                default -> message = MessageUtil.createMessage(id, "working on this feature");
             }
             execute(message);
         }
