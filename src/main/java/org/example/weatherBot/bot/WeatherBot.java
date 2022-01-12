@@ -22,15 +22,17 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
 
     private final WeatherRequester weatherRequester;
     private final SQL sql;
+    private final BotProperties properties;
+
 
     @Override
     public String getBotUsername() {
-        return "ikvldbot";
+        return properties.getUsername();
     }
 
     @Override
     public String getBotToken() {
-        return "5019609366:AAG4d7wt7Kpu3NS4ztrX3HDesz82P64yPr4";
+        return properties.getToken();
     }
 
     @Override
