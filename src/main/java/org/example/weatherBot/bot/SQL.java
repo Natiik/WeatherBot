@@ -3,12 +3,14 @@ package org.example.weatherBot.bot;
 import org.example.weatherBot.user_entity.Language;
 import org.example.weatherBot.user_entity.Metrics;
 import org.example.weatherBot.user_entity.User;
+import org.springframework.stereotype.Service;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+@Service
 public class SQL {
     public static final String DB = "jdbc:sqlite:set.db";
 

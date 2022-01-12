@@ -3,6 +3,7 @@ package org.example.weatherBot.bot;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.example.weatherBot.response.Response;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,7 +11,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
-
+@Service
 public class WeatherRequester {
     private static final HttpClient HTTP = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)

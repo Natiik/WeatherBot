@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.example.weatherBot.utility.AnswerCreator;
 import org.example.weatherBot.utility.ButtonUtil;
 import org.example.weatherBot.utility.MessageUtil;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,6 +16,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class WeatherBot extends TelegramLongPollingCommandBot {
 
@@ -23,12 +25,12 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
 
     @Override
     public String getBotUsername() {
-        return "weather06_bot";
+        return "ikvldbot";
     }
 
     @Override
     public String getBotToken() {
-        return "5068016198:AAHEfNgcmj3hCpiUAwHrJrd4T7kIvhuhfVw";
+        return "5019609366:AAG4d7wt7Kpu3NS4ztrX3HDesz82P64yPr4";
     }
 
     @Override
