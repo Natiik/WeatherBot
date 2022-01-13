@@ -12,11 +12,13 @@ import java.util.ArrayList;
 
 @Service
 public class SQL {
-    public static final String DB = "jdbc:sqlite:set.db";
+    public static final String DB = "jdbc:postgresql://localhost:5432/postgres";
+    public static final String USER ="///";
+    public static  final String PASSWORD = "///";
 
     static {
         try {
-            Class.forName("org.sqlite.JDBC");
+            Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -24,7 +26,7 @@ public class SQL {
 
     public void insertDefault(String id) {
         if (!ifExist(id)) {
-            try (Statement statement = DriverManager.getConnection(DB).createStatement()) {
+            try (Statement statement = DriverManager.getConnection(DB,USER,PASSWORD).createStatement()) {
                 String sql = "INSERT INTO setting VALUES ('%s', 'metric','ru',703448);".formatted(id);
                 statement.execute(sql);
             } catch (Exception e) {
@@ -62,7 +64,7 @@ public class SQL {
     }
 
     public void update(String id, String column, String value) {
-        try (Statement statement = DriverManager.getConnection(DB).createStatement()) {
+        try (Statement statement = DriverManager.getConnection(DB, USER, PASSWORD).createStatement()) {
             String sql = "UPDATE setting SET %s = '%s' WHERE Id = %s;".formatted(column, value, id);
             statement.execute(sql);
         } catch (Exception e) {
