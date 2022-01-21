@@ -22,7 +22,6 @@ import java.util.List;
 public class WeatherBot extends TelegramLongPollingCommandBot {
 
     private final WeatherRequester weatherRequester;
-    private final SQL sql;
     private final BotProperties properties;
     private final UserService userService;
 
