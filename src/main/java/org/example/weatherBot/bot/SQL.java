@@ -1,20 +1,23 @@
 package org.example.weatherBot.bot;
 
+import lombok.RequiredArgsConstructor;
+import org.example.weatherBot.repository.UserRepository;
 import org.example.weatherBot.user_entity.Language;
 import org.example.weatherBot.user_entity.Metrics;
 import org.example.weatherBot.user_entity.User;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+@RequiredArgsConstructor
 @Service
 public class SQL {
+    private final DataBaseProperties properties;
     public static final String DB = "jdbc:postgresql://localhost:5432/postgres";
-    public static final String USER ="///";
-    public static  final String PASSWORD = "///";
 
     static {
         try {
@@ -26,8 +29,8 @@ public class SQL {
 
     public void insertDefault(String id) {
         if (!ifExist(id)) {
-            try (Statement statement = DriverManager.getConnection(DB,USER,PASSWORD).createStatement()) {
-                String sql = "INSERT INTO setting VALUES ('%s', 'metric','ru',703448);".formatted(id);
+            try (Statement statement = DriverManager.getConnection(DB,properties.getUsername(), properties.getPassword()).createStatement()) {
+                String sql = "INSERT INTO setting (id, metrics, language, location) VALUES ('%s', 'metric','ru',703448);".formatted(id);
                 statement.execute(sql);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -37,8 +40,8 @@ public class SQL {
 
 
     private ArrayList<User> selectAll() {
-        try (Statement statement = DriverManager.getConnection(DB).createStatement()) {
-            String sql = "SELECT * FROM setting;";
+        try (Statement statement = DriverManager.getConnection(DB,properties.getUsername(), properties.getPassword()).createStatement()) {
+            String sql = "SELECT id, metrics, language, location FROM setting;";
             ResultSet set = statement.executeQuery(sql);
             ArrayList<User> list = new ArrayList<>();
             while (set.next()) {
@@ -64,7 +67,7 @@ public class SQL {
     }
 
     public void update(String id, String column, String value) {
-        try (Statement statement = DriverManager.getConnection(DB, USER, PASSWORD).createStatement()) {
+        try (Statement statement = DriverManager.getConnection(DB,properties.getUsername(), properties.getPassword()).createStatement()) {
             String sql = "UPDATE setting SET %s = '%s' WHERE Id = %s;".formatted(column, value, id);
             statement.execute(sql);
         } catch (Exception e) {

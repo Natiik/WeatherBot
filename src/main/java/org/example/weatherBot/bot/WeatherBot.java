@@ -3,6 +3,7 @@ package org.example.weatherBot.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.example.weatherBot.service.UserService;
 import org.example.weatherBot.utility.AnswerCreator;
 import org.example.weatherBot.utility.ButtonUtil;
 import org.example.weatherBot.utility.MessageUtil;
@@ -23,6 +24,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
     private final WeatherRequester weatherRequester;
     private final SQL sql;
     private final BotProperties properties;
+    private final UserService userService;
 
 
     @Override
@@ -39,7 +41,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
     @SneakyThrows
     public void processNonCommandUpdate(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String id = String.valueOf(update.getMessage().getChatId());
+            Long id = update.getMessage().getChatId();
             SendMessage message;
 
             String text = update.getMessage().getText();
@@ -51,14 +53,14 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                         ButtonUtil.createButton("Get weather", "get_weather"))));
                 message = MessageUtil.createMessageWithButton(id, AnswerCreator.getGreeting(), markupInline);
 
-                sql.insertDefault(id);
+                userService.insertDefault(id);
             } else {
                 message = new SendMessage();
             }
             execute(message);
 
         } else if (update.hasCallbackQuery()) {
-            String id = String.valueOf(update.getCallbackQuery().getMessage().getChatId());
+            Long id = update.getCallbackQuery().getMessage().getChatId();
             SendMessage message;
             String data = update.getCallbackQuery().getData();
             switch (data) {
@@ -79,19 +81,22 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 }
                 case "standard" -> {
                     message = MessageUtil.createMessage(id, "Metrics changed to Standard");
-                    sql.update(id, "Metrics", "standard");
+                    userService.update(id,"metrics","standard");
                 }
                 case "metric" -> {
                     message = MessageUtil.createMessage(id, "Metrics changed to Metric");
-                    sql.update(id, "Metrics", "metric");
+                    userService.update(id,"metrics","metric");
                 }
                 case "imperial" -> {
                     message = MessageUtil.createMessage(id, "Metrics changed to Imperial");
-                    sql.update(id, "Metrics", "imperial");
+                    userService.update(id,"metrics","imperial");
                 }
                 default -> message = MessageUtil.createMessage(id, "working on this feature");
             }
             execute(message);
+        }else {
+            Long chatId = update.getMessage().getChatId();
+            execute(MessageUtil.createMessage(chatId,"¯\\_(ツ)_/"));
         }
     }
 }

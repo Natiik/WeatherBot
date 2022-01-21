@@ -17,15 +17,25 @@ public class Setting {
 
 
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     private Long id;
 
-    @Column (name = "Metrics")
+    @Column (name = "metrics")
     private String metrics;
 
-    @Column (name = "Lang")
+    @Column (name = "language")
     private String language;
 
-    @Column(name = "Loc_id")
+    @Column(name = "location")
     private Long location;
+
+    public Setting(Long id, String metrics, String language, Long location) {
+        this.id = id;
+        this.metrics = metrics;
+        this.language = language;
+        this.location = location;
+    }
+
+    public Setting() {
+    }
 }

@@ -5,17 +5,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 
 public class MessageUtil {
 
-    public static SendMessage createMessage(String id, String text) {
+    public static SendMessage createMessage(Long id, String text) {
         SendMessage message = new SendMessage();
         message.setText(text);
-        message.setChatId(id);
+        message.setChatId(String.valueOf(id));
         return message;
     }
 
-    public static SendMessage createMessageWithButton(String id, String text, InlineKeyboardMarkup markup) {
+    public static SendMessage createMessageWithButton(Long id, String text, InlineKeyboardMarkup markup) {
         SendMessage message = new SendMessage();
         message.setText(text);
-        message.setChatId(id);
+        message.setChatId(String.valueOf(id));
         message.setReplyMarkup(markup);
         return message;
     }

@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public class BotProperties {
-    @Value("${bot.username}")
+public class DataBaseProperties {
+    @Value("${spring.datasource.username}")
     private String username;
 
-    @Value("${bot.token}")
-    private String token;
+    @Value("${spring.datasource.password}")
+    private String password;
+
 
 }
+
