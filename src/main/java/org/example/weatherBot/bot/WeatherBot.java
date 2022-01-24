@@ -80,22 +80,41 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 }
                 case "standard" -> {
                     message = MessageUtil.createMessage(id, "Metrics changed to Standard");
-                    userService.update(id,"metrics","standard");
+                    userService.update(id, "metrics", "standard");
                 }
                 case "metric" -> {
                     message = MessageUtil.createMessage(id, "Metrics changed to Metric");
-                    userService.update(id,"metrics","metric");
+                    userService.update(id, "metrics", "metric");
                 }
                 case "imperial" -> {
                     message = MessageUtil.createMessage(id, "Metrics changed to Imperial");
-                    userService.update(id,"metrics","imperial");
+                    userService.update(id, "metrics", "imperial");
+                }
+                case "set_language"->{
+                    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                    List<List<InlineKeyboardButton>> lists= new ArrayList<>();
+                    lists.add(List.of(ButtonUtil.createButton("English", "english"), ButtonUtil.createButton("Russian", "russian"), ButtonUtil.createButton("Ukrainian", "ukrainian")));
+                    markup.setKeyboard(lists);
+                    message= MessageUtil.createMessageWithButton(id, "Choose one language from the list of available ones",markup);
+                }
+                case "english"->{
+                    message = MessageUtil.createMessage(id, "Language changed to English");
+                    userService.update(id, "language", "en");
+                }
+                case "russian"->{
+                    message = MessageUtil.createMessage(id, "Language changed to Russian");
+                    userService.update(id, "language", "ru");
+                }
+                case "ukrainian"->{
+                    message = MessageUtil.createMessage(id, "Language changed to Ukrainian");
+                    userService.update(id, "language", "ukr");
                 }
                 default -> message = MessageUtil.createMessage(id, "working on this feature");
             }
             execute(message);
-        }else {
+        } else {
             Long chatId = update.getMessage().getChatId();
-            execute(MessageUtil.createMessage(chatId,"¯\\_(ツ)_/"));
+            execute(MessageUtil.createMessage(chatId, "¯\\_(ツ)_/"));
         }
     }
 }
