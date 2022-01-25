@@ -53,7 +53,12 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 message = MessageUtil.createMessageWithButton(id, AnswerCreator.getGreeting(), markupInline);
 
                 userService.insertDefault(id);
-            } else {
+            } else if ("/change_settings".equals(text)){
+                message = MessageUtil.createMessageWithButton(id, AnswerCreator.getSettingMessage(), new InlineKeyboardMarkup(List.of(List.of(
+                        ButtonUtil.createButton("Metrics", "set_metrics"),
+                        ButtonUtil.createButton("Location", "set_location"),
+                        ButtonUtil.createButton("Language", "set_language")))));
+            }else {
                 message = new SendMessage();
             }
             execute(message);

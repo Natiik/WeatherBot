@@ -17,7 +17,16 @@ public class AnswerCreator {
                 Скорость ветра %s м/с
                 Восход солнца: %s
                 Заход солнца: %s"""
-                .formatted(response.getName(), DateUtil.toNormal(response.getDt()), response.getWeather().stream().map(Weather::getDescription).collect(Collectors.joining(", ")), (int) Math.round(response.getMain().getTemp()), (int) Math.round(response.getMain().getFeels_like()), response.getMain().getHumidity(), response.getMain().getPressure(), response.getWind().getSpeed(), DateUtil.toNormal(response.getSys().getSunrise()), DateUtil.toNormal(response.getSys().getSunset()));
+                .formatted(
+                        response.getName(),
+                        DateUtil.toNormal(response.getDt()),
+                        response.getWeather().stream().map(Weather::getDescription).collect(Collectors.joining(", ")),
+                        (int) Math.round(response.getMain().getTemp()),
+                        (int) Math.round(response.getMain().getFeels_like()),
+                        response.getMain().getHumidity(), response.getMain().getPressure(),
+                        response.getWind().getSpeed(),
+                        DateUtil.toNormalTime(response.getSys().getSunrise()),
+                        DateUtil.toNormalTime(response.getSys().getSunset()));
         return answer;
     }
 
