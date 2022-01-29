@@ -1,4 +1,4 @@
-package org.example.weatherBot.user_entity;
+package org.example.weatherBot.entities.entity_structure;
 
 public enum Metrics {
     STANDARD,
