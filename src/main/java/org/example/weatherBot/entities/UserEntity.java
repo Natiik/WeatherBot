@@ -19,11 +19,11 @@ public class UserEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column (name = "metrics")
+    @Column(name = "metrics")
     @Enumerated(EnumType.STRING)
     private Metrics metrics;
 
-    @Column (name = "language")
+    @Column(name = "language")
     @Enumerated(EnumType.STRING)
     private Language language;
 
@@ -40,11 +40,11 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public void setMetrics(String value){
-        this.metrics=Metrics.valueOf(value.toUpperCase());
+    public void setMetrics(String value) {
+        this.metrics = Metrics.valueOf(value.toUpperCase());
     }
 
-    public void setLanguage(String value){
-        this.language=Language.valueOf(value.toUpperCase());
+    public void setLanguage(String value) {
+        this.language = Language.valueOf(value.toUpperCase());
     }
 }
