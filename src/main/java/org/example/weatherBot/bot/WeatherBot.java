@@ -38,36 +38,36 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
     @SneakyThrows
     public void processNonCommandUpdate(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            Long id = update.getMessage().getChatId();
+            Long chatId = update.getMessage().getChatId();
             int messageId = update.getMessage().getMessageId();
 
             String text = update.getMessage().getText();
             if (("/get_weather".equals(text)) || ("Get weather").equals(text)) {
-                execute(messageService.createMessageWithMenu(id, AnswerCreator.writeWeather(weatherRequester.sendRequest()), messageId, List.of(List.of("Get weather", "Get picture"),
+                execute(messageService.createMessageWithMenu(chatId, AnswerCreator.writeWeather(weatherRequester.sendRequest()), messageId, List.of(List.of("Get weather", "Get picture"),
                         List.of("Change settings"))));
             } else if ("/start".equals(text)) {
-                userService.insertDefault(id);
-                execute(messageService.createMessageWithMenu(id, AnswerCreator.getGreeting(), messageId, List.of(List.of("Get weather", "Get picture"),
+                userService.insertDefault(chatId);
+                execute(messageService.createMessageWithMenu(chatId, AnswerCreator.getGreeting(), messageId, List.of(List.of("Get weather", "Get picture"),
                         List.of("Change settings"))));
             } else if (("/change_settings".equals(text)) || ("Change settings".equals(text))) {
-                execute(messageService.createMessageWithMenu(id, AnswerCreator.getSettingMessage(), messageId, List.of(List.of("Language", "Metrics", "Location"),
+                execute(messageService.createMessageWithMenu(chatId, AnswerCreator.getSettingMessage(), messageId, List.of(List.of("Language", "Metrics", "Location"),
                         List.of("Return to menu"))));
             } else if (("/picture".equals(text)) || ("Get picture").equals(text)) {
-                execute(messageService.createPhotoMessage(id, weatherRequester.sendRequest()));
+                execute(messageService.createPhotoMessage(chatId, weatherRequester.sendRequest()));
             } else if ("Return to menu".equals(text)) {
-                execute(messageService.createMessageWithMenu(id, "Menu", messageId, List.of(List.of("Get weather", "Get picture"),
+                execute(messageService.createMessageWithMenu(chatId, "Menu", messageId, List.of(List.of("Get weather", "Get picture"),
                         List.of("Change settings"))));
             } else if ("Language".equals(text)) {
-                execute(messageService.createMessageWithButton(id,
+                execute(messageService.createMessageWithButton(chatId,
                         "Choose one language from the list of available ones",
                         List.of(Map.of("english", "English", "russian", "Russian", "ukrainian", "Ukrainian"))));
             } else if ("Metrics".equals(text)) {
-                // TODO
-                execute(messageService.createMessageWithButton(id,
+                // TODO make response in other languages
+                execute(messageService.createMessageWithButton(chatId,
                         "Temperature is measured in: \nStandard - Kelvin \nMetric - Celsius \nImperial - Fahrenheit",
                         List.of(Map.of("standard", "Standard", "metric", "Metric", "imperial", "Imperial"))));
             } else {
-                execute(messageService.createMessage(id, "¯\\_(ツ)_/"));
+                execute(messageService.createMessage(chatId, "¯\\_(ツ)_/"));
             }
 
         } else if (update.hasCallbackQuery()) {

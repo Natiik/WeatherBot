@@ -1,7 +1,6 @@
 package org.example.weatherBot.utility;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 
 public class ButtonUtil {
 
