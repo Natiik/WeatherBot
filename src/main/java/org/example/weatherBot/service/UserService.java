@@ -1,6 +1,8 @@
 package org.example.weatherBot.service;
 
-import org.example.weatherBot.entities.Setting;
+import org.example.weatherBot.entities.UserEntity;
+import org.example.weatherBot.entities.entity_structure.Language;
+import org.example.weatherBot.entities.entity_structure.Metrics;
 import org.example.weatherBot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,12 @@ public class UserService {
 
     public void insertDefault(Long id) {
         if (!userRepository.existsById(id)) {
-            userRepository.save(new Setting(id, "metric", "ru", 703448L));
+            userRepository.save(new UserEntity(id, "metric", "ru", 703448L));
         }
     }
 
     public void update(Long id, String column, String value) {
-        Setting user = userRepository.getById(id);
+        UserEntity user = userRepository.getById(id);
         switch (column) {
             case "metrics" -> {
                 user.setMetrics(value);
