@@ -13,7 +13,7 @@ import java.io.File;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
-    private final PictureService pictureUtil;
+    private final PictureService pictureService;
 
     public SendMessage createMessage(Long id, String text) {
         SendMessage message = new SendMessage();
@@ -31,8 +31,8 @@ public class MessageService {
     }
 
     public SendPhoto createPhotoMessage(Long id, Response response) {
-        pictureUtil.createSVG(id, response);
-        pictureUtil.SVGtoJPG(id);
+        pictureService.createSVG(id, response);
+        pictureService.SVGtoJPG(id);
         return new SendPhoto(id.toString(), new InputFile(new File("%s.jpg".formatted(id.toString()))));
     }
 }

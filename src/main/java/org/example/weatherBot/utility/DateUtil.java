@@ -12,7 +12,7 @@ public class DateUtil {
         return SIMPLE_FORMAT.format(date);
     }
 
-    public static String toNormalTime (long dt){
+    public static String toNormalTime(long dt) {
         return toNormal(dt).substring(11);
     }
 }

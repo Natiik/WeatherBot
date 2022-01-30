@@ -26,10 +26,10 @@ public class UserService {
         UserEntity user = userRepository.getById(id);
         switch (column) {
             case "metrics" -> {
-                user.setMetrics(Metrics.valueOf(value.toUpperCase()));
+                user.setMetrics(value);
             }
             case "language" -> {
-                user.setLanguage(Language.valueOf(value.toUpperCase()));
+                user.setLanguage(value);
             }
             case "location" -> {
                 user.setLocation(Long.parseLong(value));

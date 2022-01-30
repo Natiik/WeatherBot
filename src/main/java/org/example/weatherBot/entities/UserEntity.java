@@ -39,4 +39,12 @@ public class UserEntity {
 
     public UserEntity() {
     }
+
+    public void setMetrics(String value){
+        this.metrics=Metrics.valueOf(value.toUpperCase());
+    }
+
+    public void setLanguage(String value){
+        this.language=Language.valueOf(value.toUpperCase());
+    }
 }
