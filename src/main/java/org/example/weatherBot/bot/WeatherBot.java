@@ -3,12 +3,12 @@ package org.example.weatherBot.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.example.weatherBot.service.CityService;
 import org.example.weatherBot.service.MessageService;
 import org.example.weatherBot.service.UserService;
 import org.example.weatherBot.utility.AnswerCreator;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
@@ -22,6 +22,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
     private final BotProperties properties;
     private final UserService userService;
     private final MessageService messageService;
+    private final CityService cityService;
 
 
     @Override
@@ -66,42 +67,59 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 execute(messageService.createMessageWithButton(chatId,
                         "Temperature is measured in: \nStandard - Kelvin \nMetric - Celsius \nImperial - Fahrenheit",
                         List.of(Map.of("standard", "Standard", "metric", "Metric", "imperial", "Imperial"))));
+            } else if ("Location".equals(text)) {
+                // TODO think of better way
+                execute(messageService.createMessage(chatId, "Type your location starting with ="));
+            } else if ((text != null) && (text.startsWith("="))) {
+                Map<String, String> similarCities = cityService.findSimilarCities(text.substring(1));
+                if (similarCities.size() > 5) {
+                    execute(messageService.createMessage(chatId, "Found too many results. Specify your request"));
+                } else {
+                    execute(messageService.createMessageWithButton(
+                            chatId,
+                            "We found %d location by your request. Select yours:".formatted(similarCities.size()),
+                            List.of(
+                                    similarCities,
+                                    Map.of("/none", "None of suggested"))
+                    ));
+                }
             } else {
                 execute(messageService.createMessage(chatId, "¯\\_(ツ)_/"));
             }
 
         } else if (update.hasCallbackQuery()) {
             Long id = update.getCallbackQuery().getMessage().getChatId();
-            SendMessage message;
             String data = update.getCallbackQuery().getData();
-            switch (data) {
-                case "standard" -> {
-                    message = messageService.createMessage(id, "Metrics changed to Standard");
-                    userService.update(id, "metrics", "standard");
-                }
-                case "metric" -> {
-                    message = messageService.createMessage(id, "Metrics changed to Metric");
-                    userService.update(id, "metrics", "metric");
-                }
-                case "imperial" -> {
-                    message = messageService.createMessage(id, "Metrics changed to Imperial");
-                    userService.update(id, "metrics", "imperial");
-                }
-                case "english" -> {
-                    message = messageService.createMessage(id, "Language changed to English");
-                    userService.update(id, "language", "en");
-                }
-                case "russian" -> {
-                    message = messageService.createMessage(id, "Language changed to Russian");
-                    userService.update(id, "language", "ru");
-                }
-                case "ukrainian" -> {
-                    message = messageService.createMessage(id, "Language changed to Ukrainian");
-                    userService.update(id, "language", "ukr");
-                }
-                default -> message = messageService.createMessage(id, "working on this feature");
+            if ("standard".equals(data)) {
+                userService.update(id, "metrics", "standard");
+                execute(messageService.createMessage(id, "Metrics changed to Standard"));
+            } else if ("metric".equals(data)) {
+                userService.update(id, "metrics", "metric");
+                execute(messageService.createMessage(id, "Metrics changed to Metric"));
+            } else if ("imperial".equals(data)) {
+                userService.update(id, "metrics", "imperial");
+                execute(messageService.createMessage(id, "Metrics changed to Imperial"));
+            } else if ("english".equals(data)) {
+                userService.update(id, "language", "en");
+                execute(messageService.createMessage(id, "Language changed to English"));
+            } else if ("russian".equals(data)) {
+                userService.update(id, "language", "ru");
+                execute(messageService.createMessage(id, "Language changed to Russian"));
+            } else if ("ukrainian".equals(data)) {
+                userService.update(id, "language", "ukr");
+                execute(messageService.createMessage(id, "Language changed to Ukrainian"));
+            } else if ((data != null) && (data.startsWith("/ci_"))) {
+                userService.update(id, "location", data.substring(4));
+                execute(messageService.createMessage(
+                        id,
+                        "Location successfully changed to %s"
+                                .formatted(cityService.getCityNameById(Integer.parseInt(data.substring(4))))
+                ));
+            } else if ("/none".equals(data)) {
+                execute(messageService.createMessage(id, "Sorry not sorry"));
+            } else {
+                execute(messageService.createMessage(id, "working on this feature"));
             }
-            execute(message);
         }
     }
 }
