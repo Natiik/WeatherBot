@@ -1,8 +1,6 @@
 package org.example.weatherBot.service;
 
 import org.example.weatherBot.entities.UserEntity;
-import org.example.weatherBot.entities.entity_structure.Language;
-import org.example.weatherBot.entities.entity_structure.Metrics;
 import org.example.weatherBot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

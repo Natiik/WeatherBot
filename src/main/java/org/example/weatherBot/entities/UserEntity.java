@@ -3,8 +3,8 @@ package org.example.weatherBot.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.example.weatherBot.entities.entity_structure.Language;
-import org.example.weatherBot.entities.entity_structure.Metrics;
+import org.example.weatherBot.entities.user_entity_structure.Language;
+import org.example.weatherBot.entities.user_entity_structure.Metrics;
 
 import javax.persistence.*;
 
