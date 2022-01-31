@@ -11,7 +11,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class BotStarter {
 
     public BotStarter(@Autowired WeatherBot weatherBot, @Autowired UserRepository userRepository) {
-        System.out.println(userRepository.count());
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(weatherBot);
