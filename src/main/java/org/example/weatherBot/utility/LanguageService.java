@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class LanguageService {
 
     public String writeWeather(Response response, UserEntity user) {
-        System.out.println("hhh");
         return getText(user.getLanguage(), "weather_state_" + user.getMetrics().toString().toLowerCase())
                 .formatted(
                         response.getName(),

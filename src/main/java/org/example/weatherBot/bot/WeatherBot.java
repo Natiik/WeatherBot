@@ -47,9 +47,9 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             String text = update.getMessage().getText();
             Language currentLang;
             if (userService.existById(chatId)) {
-                 currentLang = userService.getUserById(chatId).getLanguage();
-            } else{
-                 currentLang= Language.EN;
+                currentLang = userService.getUserById(chatId).getLanguage();
+            } else {
+                currentLang = Language.EN;
             }
 
             if (("/get_weather".equals(text)) || languageService.getText(currentLang, "get_weather").equals(text)) {
@@ -136,6 +136,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
 
         } else if (update.hasCallbackQuery()) {
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
+            Integer messageId = update.getCallbackQuery().getMessage().getMessageId();
             String data = update.getCallbackQuery().getData();
             Language currentLang = userService.getUserById(chatId).getLanguage();
 
@@ -159,22 +160,34 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 );
             } else if ("english".equals(data)) {
                 userService.update(chatId, "language", "en");
-                execute(messageService.createMessage(
+                execute(messageService.createMessageWithMenu(
                         chatId,
-                        languageService.getText(currentLang, "success_change_en"))
-                );
+                        languageService.getText(Language.EN, "success_change_en"),
+                        messageId,
+                        List.of(
+                                languageService.getMenuButtonsNames(Language.EN, List.of("get_weather", "get_picture")),
+                                List.of(languageService.getText(Language.EN, "change_settings"))
+                        )));
             } else if ("russian".equals(data)) {
                 userService.update(chatId, "language", "ru");
-                execute(messageService.createMessage(
+                execute(messageService.createMessageWithMenu(
                         chatId,
-                        languageService.getText(currentLang, "success_change_ru"))
-                );
+                        languageService.getText(Language.RU, "success_change_ru"),
+                        messageId,
+                        List.of(
+                                languageService.getMenuButtonsNames(Language.RU, List.of("get_weather", "get_picture")),
+                                List.of(languageService.getText(Language.RU, "change_settings"))
+                        )));
             } else if ("ukrainian".equals(data)) {
                 userService.update(chatId, "language", "ua");
-                execute(messageService.createMessage(
+                execute(messageService.createMessageWithMenu(
                         chatId,
-                        languageService.getText(currentLang, "success_change_ua"))
-                );
+                        languageService.getText(Language.UA, "success_change_ua"),
+                        messageId,
+                        List.of(
+                                languageService.getMenuButtonsNames(Language.UA, List.of("get_weather", "get_picture")),
+                                List.of(languageService.getText(Language.UA, "change_settings"))
+                        )));
             } else if ((data != null) && (data.startsWith("/ci_"))) {
                 userService.update(chatId, "location", data.substring(4));
                 execute(messageService.createMessage(
