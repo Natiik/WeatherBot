@@ -4,6 +4,7 @@ package org.example.weatherBot.bot;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.example.weatherBot.entities.user_entity_structure.Language;
+import org.example.weatherBot.properties.BotProperties;
 import org.example.weatherBot.service.CityService;
 import org.example.weatherBot.service.MessageService;
 import org.example.weatherBot.service.UserService;
@@ -54,7 +55,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             if (("/get_weather".equals(text)) || languageService.getText(currentLang, "get_weather").equals(text)) {
                 execute(messageService.createMessageWithMenu(
                         chatId,
-                        languageService.writeWeather(weatherRequester.sendRequest(), userService.getById(chatId)),
+                        languageService.writeWeather(weatherRequester.sendRequest(chatId), userService.getById(chatId)),
                         messageId,
                         List.of(
                                 languageService.getMenuButtonsNames(currentLang, List.of("get_weather", "get_picture")),
