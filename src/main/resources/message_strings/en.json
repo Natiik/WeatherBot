@@ -29,5 +29,8 @@
   "none_ans": "Sorry not sorry",
   "working": "Working on this feature",
   "menu": "Menu",
-  "success_change_location": "Location successfully changed to %s"
+  "success_change_location": "Location successfully changed to %s",
+  "metric": "Metric",
+  "standard": "Standard",
+  "imperial": "Imperial"
 }

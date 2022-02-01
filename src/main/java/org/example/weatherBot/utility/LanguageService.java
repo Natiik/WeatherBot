@@ -19,7 +19,7 @@ public class LanguageService {
 
     public String writeWeather(Response response, UserEntity user) {
         System.out.println("hhh");
-        return getText(user.getLanguage(),"weather_state_"+user.getMetrics().toString())
+        return getText(user.getLanguage(), "weather_state_" + user.getMetrics().toString().toLowerCase())
                 .formatted(
                         response.getName(),
                         DateUtil.toNormal(response.getDt()),
@@ -40,9 +40,10 @@ public class LanguageService {
                 .get(key)
                 .toString();
     }
+
     @SneakyThrows
-    public List<String> getMenuButtonsNames (Language language, List<String> keys){
-        HashMap<String,String> hashMap = new ObjectMapper()
+    public List<String> getMenuButtonsNames(Language language, List<String> keys) {
+        HashMap<String, String> hashMap = new ObjectMapper()
                 .readValue(new File("src/main/resources/message_strings/%s.json".formatted(language.toString().toLowerCase())), HashMap.class);
         return keys.stream()
                 .map(hashMap::get)
@@ -50,10 +51,10 @@ public class LanguageService {
     }
 
     @SneakyThrows
-    public Map<String,String> getInlineButtonsNames (Language language, List<String> keys){
-        HashMap<String,String> hashMap = new ObjectMapper()
+    public Map<String, String> getInlineButtonsNames(Language language, List<String> keys) {
+        HashMap<String, String> hashMap = new ObjectMapper()
                 .readValue(new File("src/main/resources/message_strings/%s.json".formatted(language.toString().toLowerCase())), HashMap.class);
         return keys.stream()
-                .collect(Collectors.toMap(key->key,hashMap::get ));
+                .collect(Collectors.toMap(key -> key, hashMap::get));
     }
 }

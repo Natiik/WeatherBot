@@ -29,5 +29,8 @@
   "none_ans": "Sorry not sorry",
   "working": "Працюю над цією фічею",
   "menu": "Меню",
-  "success_change_location": "Локацію успішно змінено на %s"
+  "success_change_location": "Локацію успішно змінено на %s",
+  "metric": "Metric",
+  "standard": "Standard",
+  "imperial": "Imperial"
 }

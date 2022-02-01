@@ -47,7 +47,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             String text = update.getMessage().getText();
             Language currentLang;
             if (userService.existById(chatId)) {
-                 currentLang = userService.getById(chatId).getLanguage();
+                 currentLang = userService.getUserById(chatId).getLanguage();
             } else{
                  currentLang= Language.EN;
             }
@@ -55,7 +55,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             if (("/get_weather".equals(text)) || languageService.getText(currentLang, "get_weather").equals(text)) {
                 execute(messageService.createMessageWithMenu(
                         chatId,
-                        languageService.writeWeather(weatherRequester.sendRequest(chatId), userService.getById(chatId)),
+                        languageService.writeWeather(weatherRequester.sendRequest(chatId), userService.getUserById(chatId)),
                         messageId,
                         List.of(
                                 languageService.getMenuButtonsNames(currentLang, List.of("get_weather", "get_picture")),
@@ -83,7 +83,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             } else if (("/picture".equals(text)) || (languageService.getText(currentLang, "get_picture").equals(text))) {
                 execute(messageService.createPhotoMessage(
                         chatId,
-                        weatherRequester.sendRequest()));
+                        weatherRequester.sendRequest(chatId)));
             } else if (languageService.getText(currentLang, "return_menu").equals(text)) {
                 execute(messageService.createMessageWithMenu(
                         chatId,
@@ -137,7 +137,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
         } else if (update.hasCallbackQuery()) {
             Long chatId = update.getCallbackQuery().getMessage().getChatId();
             String data = update.getCallbackQuery().getData();
-            Language currentLang = userService.getById(chatId).getLanguage();
+            Language currentLang = userService.getUserById(chatId).getLanguage();
 
             if ("standard".equals(data)) {
                 userService.update(chatId, "metrics", "standard");

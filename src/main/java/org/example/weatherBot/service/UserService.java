@@ -36,8 +36,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserEntity getById(Long id){
-        return userRepository.getById(id);
+    public UserEntity getUserById(Long id){
+        return userRepository.findById(id).get();
     }
 
     public boolean existById (Long id){
