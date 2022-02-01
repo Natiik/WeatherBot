@@ -1,6 +1,7 @@
 package org.example.weatherBot.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.weatherBot.entities.UserEntity;
 import org.example.weatherBot.response.Response;
 import org.example.weatherBot.utility.ButtonUtil;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,8 @@ public class MessageService {
         return message;
     }
 
-    public SendPhoto createPhotoMessage(Long id, Response response) {
-        pictureService.createSVG(id, response);
+    public SendPhoto createPhotoMessage(Long id, Response response, UserEntity user) {
+        pictureService.createSVG(id, response, user.getMetrics());
         pictureService.SVGtoJPG(id);
         return new SendPhoto(id.toString(), new InputFile(new File("%s.jpg".formatted(id.toString()))));
     }

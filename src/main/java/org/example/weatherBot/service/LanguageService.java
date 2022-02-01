@@ -1,4 +1,4 @@
-package org.example.weatherBot.utility;
+package org.example.weatherBot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -6,6 +6,7 @@ import org.example.weatherBot.entities.UserEntity;
 import org.example.weatherBot.entities.user_entity_structure.Language;
 import org.example.weatherBot.response.Response;
 import org.example.weatherBot.response.structure.Weather;
+import org.example.weatherBot.utility.DateUtil;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
