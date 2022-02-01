@@ -3,6 +3,7 @@ package org.example.weatherBot.bot;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.example.weatherBot.properties.BotProperties;
 import org.example.weatherBot.service.CityService;
 import org.example.weatherBot.service.MessageService;
 import org.example.weatherBot.service.UserService;
@@ -44,7 +45,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
 
             String text = update.getMessage().getText();
             if (("/get_weather".equals(text)) || ("Get weather").equals(text)) {
-                execute(messageService.createMessageWithMenu(chatId, AnswerCreator.writeWeather(weatherRequester.sendRequest()), messageId, List.of(List.of("Get weather", "Get picture"),
+                execute(messageService.createMessageWithMenu(chatId, AnswerCreator.writeWeather(weatherRequester.sendRequest(chatId)), messageId, List.of(List.of("Get weather", "Get picture"),
                         List.of("Change settings"))));
             } else if ("/start".equals(text)) {
                 userService.insertDefault(chatId);
@@ -54,7 +55,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                 execute(messageService.createMessageWithMenu(chatId, AnswerCreator.getSettingMessage(), messageId, List.of(List.of("Language", "Metrics", "Location"),
                         List.of("Return to menu"))));
             } else if (("/picture".equals(text)) || ("Get picture").equals(text)) {
-                execute(messageService.createPhotoMessage(chatId, weatherRequester.sendRequest()));
+                execute(messageService.createPhotoMessage(chatId, weatherRequester.sendRequest(chatId)));
             } else if ("Return to menu".equals(text)) {
                 execute(messageService.createMessageWithMenu(chatId, "Menu", messageId, List.of(List.of("Get weather", "Get picture"),
                         List.of("Change settings"))));
