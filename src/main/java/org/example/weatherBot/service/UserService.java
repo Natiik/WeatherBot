@@ -16,7 +16,7 @@ public class UserService {
 
     public void insertDefault(Long id) {
         if (!userRepository.existsById(id)) {
-            userRepository.save(new UserEntity(id, "metric", "ru", 703448L));
+            userRepository.save(new UserEntity(id, "metric", "en", 703448L));
         }
     }
 
@@ -36,7 +36,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserEntity getUserById(Long id) {
-        return userRepository.getById(id);
+    public UserEntity getUserById(Long id){
+        return userRepository.findById(id).get();
+    }
+
+    public boolean existById (Long id){
+        return userRepository.existsById(id);
     }
 }
