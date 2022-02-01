@@ -6,9 +6,9 @@ import lombok.SneakyThrows;
 import org.example.weatherBot.entities.user_entity_structure.Language;
 import org.example.weatherBot.properties.BotProperties;
 import org.example.weatherBot.service.CityService;
+import org.example.weatherBot.service.LanguageService;
 import org.example.weatherBot.service.MessageService;
 import org.example.weatherBot.service.UserService;
-import org.example.weatherBot.utility.LanguageService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -45,12 +45,9 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             Long chatId = update.getMessage().getChatId();
             int messageId = update.getMessage().getMessageId();
             String text = update.getMessage().getText();
-            Language currentLang;
-            if (userService.existById(chatId)) {
-                currentLang = userService.getUserById(chatId).getLanguage();
-            } else {
-                currentLang = Language.EN;
-            }
+            userService.insertDefault(chatId);
+            Language currentLang = userService.getUserById(chatId).getLanguage();
+
 
             if (("/get_weather".equals(text)) || languageService.getText(currentLang, "get_weather").equals(text)) {
                 execute(messageService.createMessageWithMenu(
@@ -62,7 +59,6 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                                 List.of(languageService.getText(currentLang, "change_settings"))
                         )));
             } else if ("/start".equals(text)) {
-                userService.insertDefault(chatId);
                 execute(messageService.createMessageWithMenu(
                         chatId,
                         languageService.getText(currentLang, "greeting"),
@@ -83,7 +79,9 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             } else if (("/picture".equals(text)) || (languageService.getText(currentLang, "get_picture").equals(text))) {
                 execute(messageService.createPhotoMessage(
                         chatId,
-                        weatherRequester.sendRequest(chatId)));
+                        weatherRequester.sendRequest(chatId),
+                        userService.getUserById(chatId)
+                ));
             } else if (languageService.getText(currentLang, "return_menu").equals(text)) {
                 execute(messageService.createMessageWithMenu(
                         chatId,
