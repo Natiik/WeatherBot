@@ -1,5 +1,7 @@
 package org.example.weatherBot.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
@@ -8,9 +10,11 @@ import org.example.weatherBot.response.Response;
 import org.example.weatherBot.utility.DateUtil;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 @Service
 public class PictureService {
@@ -30,7 +34,8 @@ public class PictureService {
                     response.getMain().getHumidity(),
                     DateUtil.toNormalTime(response.getSys().getSunrise()),
                     DateUtil.toNormalTime(response.getSys().getSunset()),
-                    "<path fill=\"#d8d6d6\" d=\"M247.91,160.78a46.07,46.07,0,0,1-2.09,13.87,46.75,46.75,0,0,1-15.89,23.06,18.74,18.74,0,0,1-11.59,3.79H105.91a33.41,33.41,0,0,1-.08-66.82c.37-1.42.83-2.8,1.33-4.18a54.32,54.32,0,0,1,51-35.5c16.41,0,29.23,8.35,41.09,18.84.59,0,1.13,0,1.72,0A46.7,46.7,0,0,1,236.8,130.5a46.64,46.64,0,0,1,11.11,30.28Z\"/> <circle fill=\"#d8d6d6\" cx=\"178.5\" cy=\"220.5\" r=\"8\"/> <circle fill=\"#d8d6d6\" cx=\"137.5\" cy=\"220.5\" r=\"8\"/>"));
+                    "<path fill=\"#d8d6d6\" d=\"M247.91,160.78a46.07,46.07,0,0,1-2.09,13.87,46.75,46.75,0,0,1-15.89,23.06,18.74,18.74,0,0,1-11.59,3.79H105.91a33.41,33.41,0,0,1-.08-66.82c.37-1.42.83-2.8,1.33-4.18a54.32,54.32,0,0,1,51-35.5c16.41,0,29.23,8.35,41.09,18.84.59,0,1.13,0,1.72,0A46.7,46.7,0,0,1,236.8,130.5a46.64,46.64,0,0,1,11.11,30.28Z\"/>"));
+// TODO             "<path fill=\"#d8d6d6\" d=\"M247.91,160.78a46.07,46.07,0,0,1-2.09,13.87,46.75,46.75,0,0,1-15.89,23.06,18.74,18.74,0,0,1-11.59,3.79H105.91a33.41,33.41,0,0,1-.08-66.82c.37-1.42.83-2.8,1.33-4.18a54.32,54.32,0,0,1,51-35.5c16.41,0,29.23,8.35,41.09,18.84.59,0,1.13,0,1.72,0A46.7,46.7,0,0,1,236.8,130.5a46.64,46.64,0,0,1,11.11,30.28Z\"/> <circle fill=\"#d8d6d6\" cx=\"178.5\" cy=\"220.5\" r=\"8\"/> <circle fill=\"#d8d6d6\" cx=\"137.5\" cy=\"220.5\" r=\"8\"/>"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,5 +53,11 @@ public class PictureService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @SneakyThrows
+    public String getIcon(String iconId) {
+        return new ObjectMapper()
+                .readValue(new File("src/main/resources/weather_icons/icons.json"), HashMap.class).get(iconId).toString();
     }
 }
