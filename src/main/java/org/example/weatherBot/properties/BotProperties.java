@@ -1,4 +1,4 @@
-package org.example.weatherBot.bot;
+package org.example.weatherBot.properties;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,13 +8,11 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public class DataBaseProperties {
-    @Value("${spring.datasource.username}")
+public class BotProperties {
+    @Value("${bot.username}")
     private String username;
 
-    @Value("${spring.datasource.password}")
-    private String password;
-
+    @Value("${bot.token}")
+    private String token;
 
 }
-
