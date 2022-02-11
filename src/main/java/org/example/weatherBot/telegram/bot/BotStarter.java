@@ -1,4 +1,4 @@
-package org.example.weatherBot.bot;
+package org.example.weatherBot.telegram.bot;
 
 import org.example.weatherBot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

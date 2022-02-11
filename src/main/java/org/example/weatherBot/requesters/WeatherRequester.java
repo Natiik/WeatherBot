@@ -1,4 +1,4 @@
-package org.example.weatherBot.bot;
+package org.example.weatherBot.requesters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

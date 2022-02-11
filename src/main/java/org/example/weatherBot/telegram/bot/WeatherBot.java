@@ -1,13 +1,14 @@
-package org.example.weatherBot.bot;
+package org.example.weatherBot.telegram.bot;
 
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.example.weatherBot.entities.user_entity_structure.Language;
-import org.example.weatherBot.properties.BotProperties;
+import org.example.weatherBot.telegram.properties.BotProperties;
+import org.example.weatherBot.requesters.WeatherRequester;
 import org.example.weatherBot.service.CityService;
-import org.example.weatherBot.service.LanguageService;
-import org.example.weatherBot.service.MessageService;
+import org.example.weatherBot.telegram.services.LanguageService;
+import org.example.weatherBot.telegram.services.MessageService;
 import org.example.weatherBot.service.UserService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;

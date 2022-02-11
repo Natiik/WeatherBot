@@ -5,6 +5,7 @@ import org.example.weatherBot.entities.CityEntity;
 import org.example.weatherBot.repository.CityRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,5 +25,13 @@ public class CityService {
 
     public String getCityNameById(Integer id) {
         return cityRepository.getById(id).getName();
+    }
+
+
+    public List<String> getAlikeCity(String value) {
+        return cityRepository.findByNameIsContaining(value)
+                .stream()
+                .map(CityEntity::getName)
+                .collect(Collectors.toList());
     }
 }

@@ -1,9 +1,9 @@
-package org.example.weatherBot.service;
+package org.example.weatherBot.telegram.services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.weatherBot.entities.UserEntity;
 import org.example.weatherBot.response.Response;
-import org.example.weatherBot.utility.ButtonUtil;
+import org.example.weatherBot.telegram.util.ButtonUtil;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
