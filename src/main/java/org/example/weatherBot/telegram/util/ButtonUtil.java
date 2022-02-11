@@ -1,4 +1,4 @@
-package org.example.weatherBot.utility;
+package org.example.weatherBot.telegram.util;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 

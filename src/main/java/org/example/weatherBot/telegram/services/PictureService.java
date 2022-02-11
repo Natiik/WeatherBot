@@ -1,4 +1,4 @@
-package org.example.weatherBot.service;
+package org.example.weatherBot.telegram.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;

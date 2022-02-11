@@ -1,4 +1,4 @@
-package org.example.weatherBot.properties;
+package org.example.weatherBot.telegram.properties;
 
 import lombok.Getter;
 import lombok.Setter;
