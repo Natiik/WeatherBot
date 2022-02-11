@@ -30,4 +30,8 @@ public class UserService {
     public UserEntity getUserById(Long id) {
         return userRepository.findById(id).get();
     }
+
+    public void insertUpdates(UserEntity userEntity){
+        userRepository.save(userEntity);
+    }
 }

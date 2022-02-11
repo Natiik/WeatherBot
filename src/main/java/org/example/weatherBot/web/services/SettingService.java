@@ -1,6 +1,7 @@
 package org.example.weatherBot.web.services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.weatherBot.entities.UserEntity;
 import org.example.weatherBot.service.CityService;
 import org.example.weatherBot.service.UserService;
 import org.example.weatherBot.web.dto.SettingObject;
@@ -36,6 +37,10 @@ public class SettingService {
                         settingObject.getValue());
             }
         }
+    }
+
+    public void updateSettings(UserEntity userEntity){
+        userService.insertUpdates(userEntity);
     }
 
     public List<String> getAlikeCity(String city) {
