@@ -1,15 +1,26 @@
 package org.example.weatherBot.web.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.example.weatherBot.web.dto.SettingObject;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.weatherBot.web.services.SettingService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class SettingController {
+    private final SettingService settingService;
 
     @PostMapping("/change")
     public void changeSettings(@RequestBody SettingObject settingObject) {
-        System.out.println(settingObject.toString());
+        settingService.changeSettings(settingObject);
+    }
+
+    @GetMapping("/ensure")
+    public List<String> getAlikeCity(@RequestHeader String city) {
+        List<String> alikeCity = settingService.getAlikeCity(city);
+        System.out.println(alikeCity);
+        return alikeCity;
     }
 }
