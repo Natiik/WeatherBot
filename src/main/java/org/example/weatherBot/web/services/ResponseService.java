@@ -20,7 +20,7 @@ public class ResponseService {
     public WeatherObject getWeather(Long id){
         Response response= weatherRequester.sendRequest(id);
         return WeatherObject.builder()
-                .weather(getWeatherString(response))
+                .state(getWeatherString(response))
                 .feelsLike((int)response.getMain().getFeels_like())
                 .name(response.getName())
                 .humidity(response.getMain().getHumidity())

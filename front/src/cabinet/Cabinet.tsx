@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 export const Cabinet = () => {
@@ -7,18 +7,24 @@ export const Cabinet = () => {
         if (!localStorage.getItem('id')) {
             navigate('/start')
         }
-    },[])
+    }, [])
 
     return (
         <>
             <div>
                 Nice to see you here! <br/> Choose what to do:
             </div>
-            <button onClick={()=>{}}>
+            <button onClick={()=>{navigate('/weather')}}>
                 Get weather
             </button>
             <button>
                 Settings
+            </button>
+            <button onClick={() => {
+                localStorage.removeItem('id');
+                navigate('/start')
+            }}>
+                Reset Id
             </button>
         </>
     )

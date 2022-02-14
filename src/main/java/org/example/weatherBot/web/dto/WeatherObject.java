@@ -7,7 +7,7 @@ import lombok.Value;
 @Value
 public class WeatherObject {
     String name;
-    String weather;
+    String state;
     Integer temperature;
     Integer feelsLike;
     Integer humidity;
