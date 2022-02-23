@@ -18,10 +18,10 @@ public class SettingController {
         settingService.changeSettings(settingObject);
     }
 
-    @GetMapping("/ensure")
-    public List<String> getAlikeCity(@RequestHeader String city) {
-        return settingService.getAlikeCity(city);
-    }
+//    @GetMapping("/ensure")
+//    public List<String> getAlikeCity(@RequestHeader String city) {
+//        return settingService.getAlikeCity(city);
+//    }
 
     @PostMapping("/update")
     public void updateSettings(@RequestBody UserEntity userEntity){

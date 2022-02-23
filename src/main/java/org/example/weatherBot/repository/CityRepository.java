@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CityRepository extends JpaRepositoryImplementation<CityEntity, Integer> {
     List<CityEntity> findByNameIsContaining(String value);
+    List<CityEntity> findCityEntityByCountry(String country);
 }

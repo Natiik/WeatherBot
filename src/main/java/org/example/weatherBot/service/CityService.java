@@ -34,4 +34,11 @@ public class CityService {
                 .map(CityEntity::getName)
                 .collect(Collectors.toList());
     }
+
+    public List<String> getAllCitiesByCountry(String country) {
+        return cityRepository.findCityEntityByCountry(country)
+                .stream()
+                .map(CityEntity::getName)
+                .collect(Collectors.toList());
+    }
 }
