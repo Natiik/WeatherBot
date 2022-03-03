@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Radio from '@mui/material/Radio';
@@ -6,24 +6,31 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 
-// import countryNames from './countries.json';
-
 
 export function Settings() {
-    const options = [
+    const languages = [
         {value: 'english', label: 'English'},
         {value: 'ukrainian', label: 'Українська'},
         {value: 'russian', label: 'Русский'},
     ];
 
+    const [countries, setCountries] = useState();
+
     const getCountries = () => {
-        fetch('./front/countries.json', {})
-            .then(function (response) {
-                console.log(response)
-                return response.json();
-            })
-            .then(function (myJson) {
-                console.log(myJson);
+        fetch('http://localhost:8080/location/en')
+            .then((response) => {
+                    return response.json()
+                }
+            )
+            .then((json) => {
+                console.log(json);
+               const result = json.map((country: any) => {
+                    return {
+                        value: country.shortName,
+                        label: country.fullName
+                    }
+                })
+                setCountries(result)
             })
     }
 
@@ -35,7 +42,7 @@ export function Settings() {
         <div>
             <div>Language</div>
             <Autocomplete
-                options={options}
+                options={languages}
                 sx={{width: 300}}
                 renderInput={(params) => <TextField {...params} />}
             />
@@ -48,11 +55,11 @@ export function Settings() {
                 </RadioGroup>
             </FormControl>
             <div>Location</div>
-            <Autocomplete
+            {countries&&<Autocomplete
                 renderInput={(params) => <TextField{...params}/>}
-                options={options}
+                options={countries}
                 sx={{width: 200}}
-            />
+            />}
         </div>
     );
 }

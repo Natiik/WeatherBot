@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 export const Cabinet = () => {
@@ -17,7 +17,7 @@ export const Cabinet = () => {
             <button onClick={()=>{navigate('/weather')}}>
                 Get weather
             </button>
-            <button>
+            <button onClick={()=>{navigate('/settings')}}>
                 Settings
             </button>
             <button onClick={() => {
