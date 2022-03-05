@@ -2,7 +2,7 @@ package org.example.weatherBot.telegram.services;
 
 import lombok.RequiredArgsConstructor;
 import org.example.weatherBot.entities.UserEntity;
-import org.example.weatherBot.response.Response;
+import org.example.weatherBot.response.OpenWeatherResponse;
 import org.example.weatherBot.telegram.util.ButtonUtil;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -38,8 +38,8 @@ public class MessageService {
         return message;
     }
 
-    public SendPhoto createPhotoMessage(Long id, Response response, UserEntity user) {
-        pictureService.createSVG(id, response, user.getMetrics());
+    public SendPhoto createPhotoMessage(Long id, OpenWeatherResponse openWeatherResponse, UserEntity user) {
+        pictureService.createSVG(id, openWeatherResponse, user.getMetrics());
         pictureService.SVGtoJPG(id);
         return new SendPhoto(id.toString(), new InputFile(new File("%s.jpg".formatted(id.toString()))));
     }

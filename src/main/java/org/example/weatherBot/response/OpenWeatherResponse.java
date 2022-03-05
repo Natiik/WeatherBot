@@ -10,7 +10,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class Response {
+public class OpenWeatherResponse {
    private List<Weather> weather;
    private Info main;
    private Wind wind;

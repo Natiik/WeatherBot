@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.example.weatherBot.entities.user_entity_structure.Language;
 import org.example.weatherBot.telegram.properties.BotProperties;
-import org.example.weatherBot.requesters.WeatherRequester;
+import org.example.weatherBot.requesters.OpenWeatherRequester;
 import org.example.weatherBot.service.CityService;
 import org.example.weatherBot.telegram.services.LanguageService;
 import org.example.weatherBot.telegram.services.MessageService;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WeatherBot extends TelegramLongPollingCommandBot {
 
-    private final WeatherRequester weatherRequester;
+    private final OpenWeatherRequester openWeatherRequester;
     private final BotProperties properties;
     private final UserService userService;
     private final MessageService messageService;
@@ -53,7 +53,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             if (("/get_weather".equals(text)) || languageService.getText(currentLang, "get_weather").equals(text)) {
                 execute(messageService.createMessageWithMenu(
                         chatId,
-                        languageService.writeWeather(weatherRequester.sendRequest(chatId), userService.getUserById(chatId)),
+                        languageService.writeWeather(openWeatherRequester.sendRequest(chatId), userService.getUserById(chatId)),
                         messageId,
                         List.of(
                                 languageService.getMenuButtonsNames(currentLang, List.of("get_weather", "get_picture")),
@@ -80,7 +80,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             } else if (("/picture".equals(text)) || (languageService.getText(currentLang, "get_picture").equals(text))) {
                 execute(messageService.createPhotoMessage(
                         chatId,
-                        weatherRequester.sendRequest(chatId),
+                        openWeatherRequester.sendRequest(chatId),
                         userService.getUserById(chatId)
                 ));
             } else if (languageService.getText(currentLang, "return_menu").equals(text)) {

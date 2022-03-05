@@ -13,18 +13,8 @@ import java.util.List;
 public class SettingController {
     private final SettingService settingService;
 
-    @PostMapping("/change")
-    public void changeSettings(@RequestBody SettingObject settingObject) {
-        settingService.changeSettings(settingObject);
-    }
-
-//    @GetMapping("/ensure")
-//    public List<String> getAlikeCity(@RequestHeader String city) {
-//        return settingService.getAlikeCity(city);
-//    }
-
     @PostMapping("/update")
-    public void updateSettings(@RequestBody UserEntity userEntity){
-        settingService.updateSettings(userEntity);
+    public void updateSettings(@RequestBody SettingObject settingObject){
+        settingService.updateSettings(settingObject);
     }
 }
