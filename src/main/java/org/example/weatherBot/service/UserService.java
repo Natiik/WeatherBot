@@ -13,7 +13,7 @@ public class UserService {
 
     public void insertDefault(Long id) {
         if (!userRepository.existsById(id)) {
-            userRepository.save(new UserEntity(id, "metric", "en", 703448L));
+            userRepository.save(new UserEntity(id, "metric", "en", 703448));
         }
     }
 
@@ -22,7 +22,7 @@ public class UserService {
         switch (column) {
             case "metrics" -> user.setMetrics(value);
             case "language" -> user.setLanguage(value);
-            case "location" -> user.setLocation(Long.parseLong(value));
+            case "location" -> user.setLocation(Integer.parseInt(value));
         }
         userRepository.save(user);
     }

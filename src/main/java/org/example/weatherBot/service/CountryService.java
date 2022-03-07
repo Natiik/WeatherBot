@@ -23,4 +23,11 @@ public class CountryService {
                 .collect(Collectors.toList());
     }
 
+    public CountryObject getCountryObjectByShortName(String shortName){
+        return CountryObject.builder()
+                .shortName(shortName)
+                .fullName(countryRepository.getCountryEntityByShortName(shortName).getFullName())
+                .build();
+    }
+
 }

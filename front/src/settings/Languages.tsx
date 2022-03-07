@@ -12,7 +12,7 @@ export const Languages = (props: { setter: (language: string) => void }) => {
   const [languageSelected, setLanguageSelected] = useState<{
     value: string;
     label: string
-  } | null>(null);
+  } | null>({value:"EN", label:"English"});
 
   useEffect(() => {
     if (languageSelected === null) {

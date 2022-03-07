@@ -9,6 +9,7 @@ export const Settings = () => {
   const [language, setLanguage] = useState<string>();
   const [locationId, setLocationId] = useState<number>();
   const [metrics, setMetrics] = useState<string>();
+  const [initValues, setInitValues]=useState<{language:string, }>()
 
   const press = () => {
     axios

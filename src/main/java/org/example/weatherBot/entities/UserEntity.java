@@ -28,9 +28,9 @@ public class UserEntity {
     private Language language;
 
     @Column(name = "location")
-    private Long location;
+    private Integer location;
 
-    public UserEntity(Long id, String metrics, String language, Long location) {
+    public UserEntity(Long id, String metrics, String language, Integer location) {
         this.id = id;
         this.metrics = Metrics.valueOf(metrics.toUpperCase());
         this.language = Language.valueOf(language.toUpperCase());

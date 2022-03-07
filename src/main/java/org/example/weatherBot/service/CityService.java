@@ -28,21 +28,24 @@ public class CityService {
         return cityRepository.getById(id).getName();
     }
 
-
-    public List<String> getAlikeCity(String value) {
-        return cityRepository.findByNameIsContaining(value)
-                .stream()
-                .map(CityEntity::getName)
-                .collect(Collectors.toList());
-    }
-
     public List<CityObject> getAllCitiesByCountry(String country) {
         return cityRepository.findUniqueCitiesByCountry(country)
                 .stream()
-                .map(entity->CityObject.builder()
+                .map(entity -> CityObject.builder()
                         .Id(entity.getId())
                         .name(entity.getName())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public CityObject getCityObjectById(Integer id) {
+        return CityObject.builder()
+                .Id(id)
+                .name(cityRepository.getById(id).getName())
+                .build();
+    }
+
+    public String getCountryNameById(Integer id){
+        return cityRepository.getById(id).getCountry();
     }
 }
