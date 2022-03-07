@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Languages } from "./Languages";
 import { Metrics } from "./Metrics";
 import { Location } from "./Location";
-import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const Settings = () => {
@@ -11,19 +11,39 @@ export const Settings = () => {
   const [metrics, setMetrics] = useState<string>();
 
   const press = () => {
-    axios.post("http://localhost:8080/update", {
-      id: localStorage.getItem("id"),
-      location: locationId,
-      language: language,
-      metrics: metrics,
-    }).then((response)=>{console.log(response.status)});
+    axios
+      .post("http://localhost:8080/update", {
+        id: localStorage.getItem("id"),
+        location: locationId,
+        language: language,
+        metrics: metrics,
+      })
+      .then((response) => {
+        console.log(response.status);
+      });
   };
+
+  const navigate = useNavigate();
+
   return (
     <>
       <Languages setter={setLanguage} />
       <Metrics setter={setMetrics} />
       <Location setter={setLocationId} />
-      <Button onClick={() => {press()}}>Click me</Button>
+      <button
+        onClick={() => {
+          press();
+        }}
+      >
+       Submit
+      </button>
+      <button
+        onClick={() => {
+          navigate("/cabinet");
+        }}
+      >
+        Back
+      </button>
     </>
   );
 };
