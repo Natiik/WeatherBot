@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -11,13 +11,25 @@ export const Metrics = (props: { setter: (metric: string) => void }) => {
     { value: "IMPERIAL", label: "Imperial" },
   ];
 
-  const [metricsSelected, setMetricsSelected]=useState<{value: string; label: string } | null>(null)
+  const [metricsSelected, setMetricsSelected] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (metricsSelected === null) {
+      return;
+    }
+    props.setter(metricsSelected);
+  }, [metricsSelected]);
+
   return (
     <>
       <div>Metrics</div>
       <FormControl>
         <RadioGroup
           row
+          value={metricsSelected}
+          onChange={(event: any, newMetricSelected: string | null) => {
+            setMetricsSelected(newMetricSelected);
+          }}
         >
           {metrics.map((metric, index) => (
             <FormControlLabel
