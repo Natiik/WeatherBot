@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Languages } from "./Languages";
 import { Metrics } from "./Metrics";
 import { Location } from "./Location";
@@ -9,7 +9,14 @@ export const Settings = () => {
   const [language, setLanguage] = useState<string>();
   const [locationId, setLocationId] = useState<number>();
   const [metrics, setMetrics] = useState<string>();
-  const [initValues, setInitValues]=useState<{language:string, }>()
+  const [initValues, setInitValues] = useState<{
+    language: { value: string; label: string };
+    location: {
+      country: { value: string; label: string };
+      city: { label: string; value: number };
+    };
+    metrics: string;
+  }>();
 
   const press = () => {
     axios
@@ -20,31 +27,49 @@ export const Settings = () => {
         metrics: metrics,
       })
       .then((response) => {
-        console.log(response.status);
-      });
+      if(response.status===200){
+        alert("Settings changed")
+      }else{
+        alert("Ooops...Something went wrong")
+      }
+      });//TODO
   };
+
+  useEffect(() => {
+    fetch("http://localhost:8080/init_settings/" + localStorage.getItem("id"))
+      .then((response) => response.json())
+      .then((json) => {
+        setInitValues(json);
+      });
+  }, []);
 
   const navigate = useNavigate();
 
   return (
     <>
-      <Languages setter={setLanguage} />
-      <Metrics setter={setMetrics} />
-      <Location setter={setLocationId} />
-      <button
-        onClick={() => {
-          press();
-        }}
-      >
-       Submit
-      </button>
-      <button
-        onClick={() => {
-          navigate("/cabinet");
-        }}
-      >
-        Back
-      </button>
+      {initValues ? (
+        <>
+          <Languages setter={setLanguage} init={initValues.language} />
+          <Metrics setter={setMetrics} init={initValues.metrics} />
+          <Location setter={setLocationId} init={initValues.location} />
+          <button
+            onClick={() => {
+              press();
+            }}
+          >
+            Submit
+          </button>
+          <button
+            onClick={() => {
+              navigate("/cabinet");
+            }}
+          >
+            Back
+          </button>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

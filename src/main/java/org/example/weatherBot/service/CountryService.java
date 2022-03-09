@@ -17,16 +17,16 @@ public class CountryService {
         return countryRepository.findAll().stream()
                 .map(e -> CountryObject
                         .builder()
-                        .shortName(e.getShortName())
-                        .fullName(e.getFullName())
+                        .value(e.getShortName())
+                        .label(e.getFullName())
                         .build())
                 .collect(Collectors.toList());
     }
 
     public CountryObject getCountryObjectByShortName(String shortName){
         return CountryObject.builder()
-                .shortName(shortName)
-                .fullName(countryRepository.getCountryEntityByShortName(shortName).getFullName())
+                .value(shortName)
+                .label(countryRepository.getCountryEntityByShortName(shortName).getFullName())
                 .build();
     }
 

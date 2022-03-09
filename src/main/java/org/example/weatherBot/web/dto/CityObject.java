@@ -6,6 +6,6 @@ import lombok.Value;
 @Value
 @Builder
 public class CityObject {
-    Integer Id;
-    String name;
+    Integer value;
+    String label;
 }

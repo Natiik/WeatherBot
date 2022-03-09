@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
-export const Languages = (props: { setter: (language: string) => void }) => {
+export const Languages = (props: {init:{value: string; label: string}|null, setter: (language: string) => void}) => {
   const languages = [
     { value: "EN", label: "English" },
     { value: "UA", label: "Українська" },
@@ -12,7 +12,7 @@ export const Languages = (props: { setter: (language: string) => void }) => {
   const [languageSelected, setLanguageSelected] = useState<{
     value: string;
     label: string
-  } | null>({value:"EN", label:"English"});
+  } | null>(props.init);
 
   useEffect(() => {
     if (languageSelected === null) {

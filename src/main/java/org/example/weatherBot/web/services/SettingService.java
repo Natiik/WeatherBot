@@ -10,7 +10,6 @@ import org.example.weatherBot.web.dto.InitSettingObject;
 import org.example.weatherBot.web.dto.UpdateSettingObject;
 import org.example.weatherBot.web.dto.init.LanguageObject;
 import org.example.weatherBot.web.dto.init.LocationObject;
-import org.example.weatherBot.web.dto.init.MetricsObject;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,10 +39,7 @@ public class SettingService {
                         .city(cityService.getCityObjectById(currentUser.getLocation()))
                         .country(getCountryObject(currentUser))
                         .build())
-                .metrics(MetricsObject.builder()
-                        .value(currentUser.getMetrics().toString())
-                        .label(currentUser.getMetrics().getLabel())
-                        .build())
+                .metrics(currentUser.getMetrics().toString())
                 .build();
     }
 

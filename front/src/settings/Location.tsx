@@ -2,21 +2,27 @@ import React, { useEffect, useState } from "react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
-export const Location = (props: { setter: (id: number) => void }) => {
+export const Location = (props: {
+  init: {
+    country: { value: string; label: string };
+    city: { label: string; value: number };
+  };
+  setter: (id: number) => void;
+}) => {
   const [countries, setCountries] = useState<
     { value: string; label: string }[] | null
   >(null);
   const [countrySelected, setCountrySelected] = useState<{
     value: string;
     label: string;
-  } | null>(null);
+  }|null >(props.init.country);
   const [cities, setCities] = useState<
     { value: number; label: string }[] | null
   >(null);
   const [citySelected, setCitySelected] = useState<{
     value: number;
     label: string;
-  } | null>(null);
+  }|null>(props.init.city);
 
   useEffect(() => {
     getCountries();
@@ -26,9 +32,9 @@ export const Location = (props: { setter: (id: number) => void }) => {
     getCities();
   }, [countrySelected]);
 
-  useEffect(()=>{
-    if(citySelected===null){
-      return
+  useEffect(() => {
+    if (citySelected === null) {
+      return;
     }
     props.setter(citySelected.value)
   },[citySelected])
@@ -41,8 +47,8 @@ export const Location = (props: { setter: (id: number) => void }) => {
       .then((json) => {
         const result = json.map((country: any) => {
           return {
-            value: country.shortName,
-            label: country.fullName,
+            value: country.value,
+            label: country.label,
           };
         });
         setCountries(result);
@@ -58,8 +64,8 @@ export const Location = (props: { setter: (id: number) => void }) => {
       .then((json) => {
         const result = json.map((city: any) => {
           return {
-            value: city.id,
-            label: city.name,
+            value: city.value,
+            label: city.label,
           };
         });
         setCities(result);
@@ -72,9 +78,10 @@ export const Location = (props: { setter: (id: number) => void }) => {
       {countries && (
         <Autocomplete
           value={countrySelected}
-          renderInput={(params) => <TextField {...params} />}
           options={countries}
-          sx={{ width: 200 }}
+          renderInput={(params) => <TextField {...params} />}
+          isOptionEqualToValue={(option, value)=> option.value === value.value}
+          sx={{ width: 400 }}
           onChange={(
             event: any,
             newCountrySelect: { value: string; label: string } | null
@@ -86,9 +93,10 @@ export const Location = (props: { setter: (id: number) => void }) => {
       {cities && (
         <Autocomplete
           value={citySelected}
-          renderInput={(params) => <TextField {...params} />}
           options={cities}
-          sx={{ width: 200 }}
+          renderInput={(params) => <TextField {...params} />}
+          isOptionEqualToValue={(option, value)=> option.value === value.value}
+          sx={{ width: 400 }}
           onChange={(
             event: any,
             newCitySelect: { value: number; label: string } | null

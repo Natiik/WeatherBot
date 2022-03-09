@@ -32,16 +32,16 @@ public class CityService {
         return cityRepository.findUniqueCitiesByCountry(country)
                 .stream()
                 .map(entity -> CityObject.builder()
-                        .Id(entity.getId())
-                        .name(entity.getName())
+                        .value(entity.getId())
+                        .label(entity.getName())
                         .build())
                 .collect(Collectors.toList());
     }
 
     public CityObject getCityObjectById(Integer id) {
         return CityObject.builder()
-                .Id(id)
-                .name(cityRepository.getById(id).getName())
+                .value(id)
+                .label(cityRepository.getById(id).getName())
                 .build();
     }
 

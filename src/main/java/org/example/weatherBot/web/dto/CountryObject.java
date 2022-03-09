@@ -6,6 +6,6 @@ import lombok.Value;
 @Value
 @Builder
 public class CountryObject {
-    String shortName;
-    String fullName;
+    String value;
+    String label;
 }
