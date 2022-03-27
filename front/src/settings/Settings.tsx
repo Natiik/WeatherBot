@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export const Settings = () => {
+  const navigate = useNavigate();
   const [language, setLanguage] = useState<string>();
   const [locationId, setLocationId] = useState<number>();
   const [metrics, setMetrics] = useState<string>();
@@ -27,12 +28,11 @@ export const Settings = () => {
         metrics: metrics,
       })
       .then((response) => {
-      if(response.status===200){
-        alert("Settings changed")
-      }else{
-        alert("Ooops...Something went wrong")
-      }
-      });//TODO
+          if(response.status==200){
+              navigate("change/success")
+          }
+        console.log(response.status);
+      }); //TODO
   };
 
   useEffect(() => {
@@ -42,8 +42,6 @@ export const Settings = () => {
         setInitValues(json);
       });
   }, []);
-
-  const navigate = useNavigate();
 
   return (
     <>
