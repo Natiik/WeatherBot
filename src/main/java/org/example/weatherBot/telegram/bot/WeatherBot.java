@@ -4,12 +4,12 @@ package org.example.weatherBot.telegram.bot;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.example.weatherBot.entities.user_entity_structure.Language;
-import org.example.weatherBot.telegram.properties.BotProperties;
 import org.example.weatherBot.requesters.OpenWeatherRequester;
 import org.example.weatherBot.service.CityService;
+import org.example.weatherBot.service.UserService;
+import org.example.weatherBot.telegram.properties.BotProperties;
 import org.example.weatherBot.telegram.services.LanguageService;
 import org.example.weatherBot.telegram.services.MessageService;
-import org.example.weatherBot.service.UserService;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -83,6 +83,8 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
                         openWeatherRequester.sendRequest(chatId),
                         userService.getUserById(chatId)
                 ));
+            } else if ("/id".equals(text)) {
+                execute(messageService.createMessageWithMarkDown(chatId, "Your id `" + chatId+"`"));
             } else if (languageService.getText(currentLang, "return_menu").equals(text)) {
                 execute(messageService.createMessageWithMenu(
                         chatId,
@@ -129,7 +131,7 @@ public class WeatherBot extends TelegramLongPollingCommandBot {
             } else {
                 execute(messageService.createMessage(
                         chatId,
-                        "¯\\_(ツ)_/")
+                        "¯\\_(ツ)_/¯")
                 );
             }
 

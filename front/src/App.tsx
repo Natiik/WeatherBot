@@ -4,7 +4,7 @@ import {Cabinet} from "./cabinet/Cabinet";
 import {Start} from "./index/Start";
 import {Weather} from "./weather/Weather";
 import {Settings} from "./settings/Settings";
-import {Success} from "./settings/Success";
+import {Changes} from "./settings/Changes";
 
 function App() {
     return (
@@ -14,7 +14,7 @@ function App() {
                 <Route path="/start" element={<Start/>}/>
                 <Route path="/weather" element={<Weather/>}/>
                 <Route path="/settings" element={<Settings/>}/>
-                <Route path="/settings/change/success" element={<Success/>}/>
+                <Route path="/change" element={<Changes/>}/>
                 <Route path="/" element={<Navigate to={"/start"}/>}/>
             </Routes>
         </BrowserRouter>

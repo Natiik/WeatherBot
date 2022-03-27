@@ -24,8 +24,17 @@ public class MessageService {
     private final PictureService pictureService;
 
     public SendMessage createMessage(Long id, String text) {
+        return createMessage(id, text, false);
+    }
+
+    public SendMessage createMessageWithMarkDown(Long id, String text) {
+        return createMessage(id, text, true);
+    }
+
+    private SendMessage createMessage(Long id, String text, boolean markDown) {
         SendMessage message = new SendMessage();
         message.setText(text);
+        message.enableMarkdown(markDown);
         message.setChatId(String.valueOf(id));
         return message;
     }
