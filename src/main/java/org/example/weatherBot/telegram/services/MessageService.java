@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.io.File;
@@ -82,11 +83,23 @@ public class MessageService {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
         for (Map<String, String> names : namesLists) {
             List<InlineKeyboardButton> row = new ArrayList<>();
-            names.forEach((key, value) -> {
-                row.add(ButtonUtil.createInlineButton(value, key));
-            });
+            names.forEach((key, value) ->
+                    row.add(ButtonUtil.createInlineButton(value, key)));
             rows.add(row);
         }
         return new InlineKeyboardMarkup(rows);
+    }
+
+    public SendMessage testButton(Long id, String text, int messageId) {
+        SendMessage message = new SendMessage();
+        KeyboardButton keyboardButton = new KeyboardButton();
+        keyboardButton.setText("Location");
+        keyboardButton.setRequestLocation(true);
+        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(List.of(new KeyboardRow(List.of(keyboardButton))));
+        message.setChatId(id.toString());
+        message.setText(text);
+        message.setReplyToMessageId(messageId);
+        message.setReplyMarkup(markup);
+        return message;
     }
 }

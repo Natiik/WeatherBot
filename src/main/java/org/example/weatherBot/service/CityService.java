@@ -45,7 +45,7 @@ public class CityService {
                 .build();
     }
 
-    public String getCountryNameById(Integer id){
+    public String getCountryNameById(Integer id) {
         return cityRepository.getById(id).getCountry();
     }
 }

@@ -1,4 +1,4 @@
-package org.example.weatherBot.web.dto.init;
+package org.example.weatherBot.web.dto.init_settings;
 
 import lombok.Builder;
 import lombok.Value;

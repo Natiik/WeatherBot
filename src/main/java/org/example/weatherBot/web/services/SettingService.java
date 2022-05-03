@@ -8,8 +8,8 @@ import org.example.weatherBot.service.UserService;
 import org.example.weatherBot.web.dto.CountryObject;
 import org.example.weatherBot.web.dto.InitSettingObject;
 import org.example.weatherBot.web.dto.UpdateSettingObject;
-import org.example.weatherBot.web.dto.init.LanguageObject;
-import org.example.weatherBot.web.dto.init.LocationObject;
+import org.example.weatherBot.web.dto.init_settings.LanguageObject;
+import org.example.weatherBot.web.dto.init_settings.LocationObject;
 import org.springframework.stereotype.Service;
 
 @Service

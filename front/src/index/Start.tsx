@@ -10,7 +10,7 @@ export const Start = () => {
         if (localStorage.getItem('id')) {
             navigate('/cabinet')
         }
-    },[])
+    }, [])
 
     return <>
         <Greeting/>

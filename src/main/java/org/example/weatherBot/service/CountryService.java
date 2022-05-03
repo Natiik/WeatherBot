@@ -23,7 +23,7 @@ public class CountryService {
                 .collect(Collectors.toList());
     }
 
-    public CountryObject getCountryObjectByShortName(String shortName){
+    public CountryObject getCountryObjectByShortName(String shortName) {
         return CountryObject.builder()
                 .value(shortName)
                 .label(countryRepository.getCountryEntityByShortName(shortName).getFullName())

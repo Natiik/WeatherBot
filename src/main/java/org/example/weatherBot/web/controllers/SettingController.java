@@ -6,7 +6,7 @@ import org.example.weatherBot.web.dto.UpdateSettingObject;
 import org.example.weatherBot.web.services.SettingService;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:3000", "http://65.108.88.95"})
 @RestController
 @RequiredArgsConstructor
 public class SettingController {

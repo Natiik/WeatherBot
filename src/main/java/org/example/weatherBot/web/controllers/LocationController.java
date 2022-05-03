@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:3000", "http://65.108.88.95"})
 @RestController
 @RequiredArgsConstructor
 public class LocationController {

@@ -14,10 +14,14 @@ export const Cabinet = () => {
             <div>
                 Nice to see you here! <br/> Choose what to do:
             </div>
-            <button onClick={()=>{navigate('/weather')}}>
+            <button onClick={() => {
+                navigate('/weather')
+            }}>
                 Get weather
             </button>
-            <button onClick={()=>{navigate('/settings')}}>
+            <button onClick={() => {
+                navigate('/settings')
+            }}>
                 Settings
             </button>
             <button onClick={() => {

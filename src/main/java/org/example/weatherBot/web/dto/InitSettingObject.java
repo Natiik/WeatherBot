@@ -2,8 +2,8 @@ package org.example.weatherBot.web.dto;
 
 import lombok.Builder;
 import lombok.Value;
-import org.example.weatherBot.web.dto.init.LanguageObject;
-import org.example.weatherBot.web.dto.init.LocationObject;
+import org.example.weatherBot.web.dto.init_settings.LanguageObject;
+import org.example.weatherBot.web.dto.init_settings.LocationObject;
 
 @Value
 @Builder

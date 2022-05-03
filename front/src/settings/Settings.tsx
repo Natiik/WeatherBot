@@ -4,6 +4,7 @@ import {Metrics} from "./Metrics";
 import {Location} from "./Location";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import {BACKEND_URL} from "../Properties";
 
 export const Settings = () => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export const Settings = () => {
 
     const press = () => {
         axios
-            .post("http://localhost:8080/update", {
+            .post(`${BACKEND_URL}/update`, {
                 id: localStorage.getItem("id"),
                 location: locationId,
                 language: language,
@@ -32,13 +33,13 @@ export const Settings = () => {
                 navigate("/change")
             })
             .catch((response) => {
-            localStorage.setItem("setting_status", response.response.status)
-            navigate("/change")
-        });
+                localStorage.setItem("setting_status", response.response.status)
+                navigate("/change")
+            });
     };
 
     useEffect(() => {
-        fetch("http://localhost:8080/init_settings/" + localStorage.getItem("id"))
+        fetch(`${BACKEND_URL}/init_settings/${localStorage.getItem("id")}`)
             .then((response) => response.json())
             .then((json) => {
                 setInitValues(json);

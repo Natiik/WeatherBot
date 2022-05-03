@@ -1,6 +1,7 @@
 package org.example.weatherBot.telegram.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.example.weatherBot.entities.UserEntity;
 import org.example.weatherBot.entities.user_entity_structure.Language;
@@ -16,7 +17,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LanguageService {
+    private final LanguageCache cache;
 
     public String writeWeather(OpenWeatherResponse openWeatherResponse, UserEntity user) {
         return getText(user.getLanguage(), "weather_state_" + user.getMetrics().toString().toLowerCase())
@@ -32,29 +35,19 @@ public class LanguageService {
                         DateUtil.toNormalTime(openWeatherResponse.getSys().getSunset()));
     }
 
-
-    @SneakyThrows
     public String getText(Language language, String key) {
-        return new ObjectMapper()
-                .readValue(new File("src/main/resources/message_strings/%s.json".formatted(language.toString().toLowerCase())), HashMap.class)
-                .get(key)
-                .toString();
+        return cache.getTitleByLanguageAndKey(language, key);
     }
 
-    @SneakyThrows
     public List<String> getMenuButtonsNames(Language language, List<String> keys) {
-        HashMap<String, String> hashMap = new ObjectMapper()
-                .readValue(new File("src/main/resources/message_strings/%s.json".formatted(language.toString().toLowerCase())), HashMap.class);
         return keys.stream()
-                .map(hashMap::get)
-                .collect(Collectors.toList());
+                .map(key-> cache.getTitleByLanguageAndKey(language, key))
+                .toList();
     }
 
-    @SneakyThrows
+
     public Map<String, String> getInlineButtonsNames(Language language, List<String> keys) {
-        HashMap<String, String> hashMap = new ObjectMapper()
-                .readValue(new File("src/main/resources/message_strings/%s.json".formatted(language.toString().toLowerCase())), HashMap.class);
-        return keys.stream()
-                .collect(Collectors.toMap(key -> key, hashMap::get));
+         return keys.stream()
+                .collect(Collectors.toMap(key -> key, k->cache.getTitleByLanguageAndKey(language, k)));
     }
 }

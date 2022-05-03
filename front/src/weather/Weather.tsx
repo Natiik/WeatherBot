@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Description} from "./Description";
+import {BACKEND_URL} from "../Properties";
 
 export const Weather = () => {
     const [weather, setWeather] = useState<any>();
@@ -11,13 +12,15 @@ export const Weather = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:8080/weather', head)
+        fetch(`${BACKEND_URL}/weather`, head)
             .then((response) => {
                 if (response.status === 200) {
                     (response.json()).then((json) => {
                         setWeather(json)
                     })
-                } else {setWeather('ERROR')}
+                } else {
+                    setWeather('ERROR')
+                }
             })
     }, [])
 
