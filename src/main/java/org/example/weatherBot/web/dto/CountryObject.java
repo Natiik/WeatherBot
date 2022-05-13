@@ -1,10 +1,11 @@
 package org.example.weatherBot.web.dto;
 
+import lombok.Builder;
 import lombok.Value;
 
 @Value
-public class SettingObject {
-    Long id;
-    SettingComponent settingComponent;
+@Builder
+public class CountryObject {
     String value;
+    String label;
 }

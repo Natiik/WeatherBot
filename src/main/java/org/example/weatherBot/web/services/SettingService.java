@@ -3,47 +3,47 @@ package org.example.weatherBot.web.services;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherBot.entities.UserEntity;
 import org.example.weatherBot.service.CityService;
+import org.example.weatherBot.service.CountryService;
 import org.example.weatherBot.service.UserService;
-import org.example.weatherBot.web.dto.SettingObject;
+import org.example.weatherBot.web.dto.CountryObject;
+import org.example.weatherBot.web.dto.InitSettingObject;
+import org.example.weatherBot.web.dto.UpdateSettingObject;
+import org.example.weatherBot.web.dto.init_settings.LanguageObject;
+import org.example.weatherBot.web.dto.init_settings.LocationObject;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SettingService {
     private final UserService userService;
+    private final CountryService countryService;
     private final CityService cityService;
 
-    public void changeSettings(SettingObject settingObject) {
-        switch (settingObject.getSettingComponent()) {
-            case LANGUAGE -> {
-                userService.update(
-                        settingObject.getId(),
-                        "language",
-                        settingObject.getValue()
-                );
-            }
-            case METRICS -> {
-                userService.update(
-                        settingObject.getId(),
-                        "metrics",
-                        settingObject.getValue());
-            }
-            case LOCATION -> {
-                userService.update(
-                        settingObject.getId(),
-                        "location",
-                        settingObject.getValue());
-            }
-        }
+    public void updateSettings(UpdateSettingObject updateSettingObject) {
+        userService.insertUpdates(new UserEntity(
+                updateSettingObject.getId(),
+                updateSettingObject.getMetrics(),
+                updateSettingObject.getLanguage(),
+                updateSettingObject.getLocation()));
     }
 
-    public void updateSettings(UserEntity userEntity){
-        userService.insertUpdates(userEntity);
+
+    public InitSettingObject getInitSettings(Long id) {
+        UserEntity currentUser = userService.getUserById(id);
+        return InitSettingObject.builder()
+                .language(LanguageObject.builder()
+                        .value(currentUser.getLanguage().toString())
+                        .label(currentUser.getLanguage().getLabel())
+                        .build())
+                .location(LocationObject.builder()
+                        .city(cityService.getCityObjectById(currentUser.getLocation()))
+                        .country(getCountryObject(currentUser))
+                        .build())
+                .metrics(currentUser.getMetrics().toString())
+                .build();
     }
 
-    public List<String> getAlikeCity(String city) {
-        return cityService.getAlikeCity(city);
+    private CountryObject getCountryObject(UserEntity user) {
+        return countryService.getCountryObjectByShortName(cityService.getCountryNameById(user.getLocation()));
     }
 }

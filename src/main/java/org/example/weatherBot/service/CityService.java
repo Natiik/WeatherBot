@@ -3,6 +3,7 @@ package org.example.weatherBot.service;
 import lombok.RequiredArgsConstructor;
 import org.example.weatherBot.entities.CityEntity;
 import org.example.weatherBot.repository.CityRepository;
+import org.example.weatherBot.web.dto.CityObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,11 +28,24 @@ public class CityService {
         return cityRepository.getById(id).getName();
     }
 
-
-    public List<String> getAlikeCity(String value) {
-        return cityRepository.findByNameIsContaining(value)
+    public List<CityObject> getAllCitiesByCountry(String country) {
+        return cityRepository.findUniqueCitiesByCountry(country)
                 .stream()
-                .map(CityEntity::getName)
+                .map(entity -> CityObject.builder()
+                        .value(entity.getId())
+                        .label(entity.getName())
+                        .build())
                 .collect(Collectors.toList());
+    }
+
+    public CityObject getCityObjectById(Integer id) {
+        return CityObject.builder()
+                .value(id)
+                .label(cityRepository.getById(id).getName())
+                .build();
+    }
+
+    public String getCountryNameById(Integer id) {
+        return cityRepository.getById(id).getCountry();
     }
 }
