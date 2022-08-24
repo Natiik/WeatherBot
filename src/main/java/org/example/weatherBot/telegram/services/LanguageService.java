@@ -50,4 +50,8 @@ public class LanguageService {
          return keys.stream()
                 .collect(Collectors.toMap(key -> key, k->cache.getTitleByLanguageAndKey(language, k)));
     }
+
+    public List<String> getTexts(String key){
+        return cache.getTitlesByKey(key);
+    }
 }

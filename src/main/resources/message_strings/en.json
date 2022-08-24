@@ -3,7 +3,7 @@
   "weather_state_metric": "Weather in  %s updated %s\n  Overview: %s\n Temperature: %d°C (feels like %d°C)\n  Humidity: %d%%\n  Pressure: %d hPa\n  Wind speed: %s m/s\n   Sunrise: %s\n  Sunset: %s",
   "weather_state_imperial": "Weather in  %s updated %s\n  Overview: %s\n Temperature: %d°F(feels like %d°F)\n  Humidity: %d%%\n  Pressure: %d hPa\n  Wind speed: %s m/h\n   Sunrise: %s\n  Sunset: %s",
   "weather_state_standard": "Weather in  %s updated %s\n  Overview: %s\n Temperature: %d°K (feels like %d°K)\n  Humidity: %d%%\n  Pressure: %d hPa\n  Wind speed: %s m/s\n   Sunrise: %s\n  Sunset: %s",
-  "settings": "Choose what you`d like to change:",
+  "settings": "Choose what you`d like to change. \n\n *in case you don't have opportunity to share your location automatically use command /by_hands",
   "english": "English",
   "russian": "Russian",
   "ukrainian": "Ukrainian",

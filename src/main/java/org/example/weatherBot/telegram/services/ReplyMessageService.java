@@ -1,6 +1,7 @@
 package org.example.weatherBot.telegram.services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.weatherBot.entities.CityEntity;
 import org.example.weatherBot.entities.user_entity_structure.Language;
 import org.example.weatherBot.requesters.OpenWeatherRequester;
 import org.example.weatherBot.service.CityService;
@@ -9,6 +10,7 @@ import org.example.weatherBot.telegram.exeptions.UnsuitableResponseException;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
@@ -18,7 +20,7 @@ import static org.example.weatherBot.telegram.services.MessageType.photo;
 
 @RequiredArgsConstructor
 @Service
-public class ReplyTextService {
+public class ReplyMessageService {
     private final UserService userService;
     private final MessageService messageService;
     private final LanguageService languageService;
@@ -26,7 +28,7 @@ public class ReplyTextService {
     private final CityService cityService;
 
 
-    public SendMessage process(Message message) throws UnsuitableResponseException {
+    public SendMessage processText(Message message) throws UnsuitableResponseException {
         Long chatId = message.getChatId();
         int messageId = message.getMessageId();
         String text = message.getText();
@@ -43,15 +45,17 @@ public class ReplyTextService {
             throw new UnsuitableResponseException(photo);
         } else if ("/id".equals(text)) {
             return processIdMessage(chatId);
+        } else if ("/by_hands".equals(text)) {
+            return processLocationMsg(chatId, currentLang);
         } else if (languageService.getText(currentLang, "return_menu").equals(text)) {
             return processMenuMsg(chatId, messageId, currentLang);
         } else if (languageService.getText(currentLang, "language").equals(text)) {
             return processLanguageMsg(chatId, currentLang);
         } else if (languageService.getText(currentLang, "metrics").equals(text)) {
             return processMetricsMsg(chatId, currentLang);
-        } else if (languageService.getText(currentLang, "location").equals(text)) {
-            // TODO think of better way
-            return processLocationMsg(chatId, currentLang);
+//        } else if (languageService.getText(currentLang, "location").equals(text)) {
+//            // TODO think of better way
+//            return processLocationMsg(chatId, currentLang);
         } else if ((text != null) && (text.startsWith("="))) {
             return processFindLocationMsg(chatId, currentLang, text);
         }
@@ -114,7 +118,7 @@ public class ReplyTextService {
         return messageService.createMessageWithMarkDown(chatId, "Your id `" + chatId + "`");
     }
 
-    public SendPhoto process(Message message, MessageType type) {
+    public SendPhoto processText(Message message, MessageType type) {
         if (type == photo) {
             return processPictureMsg(message.getChatId());
         }
@@ -160,5 +164,17 @@ public class ReplyTextService {
                         languageService.getMenuButtonsNames(currentLang, List.of("get_weather", "get_picture")),
                         List.of(languageService.getText(currentLang, "change_settings"))
                 ));
+    }
+
+    public SendMessage processLocation(Message message) {
+        Long chatId = message.getChatId();
+        Location location = message.getLocation();
+        Language currentLang = userService.getUserById(chatId).getLanguage();
+        CityEntity nearest = cityService.findNearest(location.getLongitude(), location.getLatitude());
+        userService.update(chatId, "location", nearest.getId().toString());
+        return messageService.createMessage(
+                chatId,
+                languageService.getText(currentLang, "success_change_location")
+                        .formatted(nearest.getName()));
     }
 }

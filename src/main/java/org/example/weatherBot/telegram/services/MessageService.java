@@ -23,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageService {
     private final PictureService pictureService;
+    private final LanguageService languageService;
 
     public SendMessage createMessage(Long id, String text) {
         return createMessage(id, text, false);
@@ -70,13 +71,38 @@ public class MessageService {
         List<KeyboardRow> keyboardRows = new ArrayList<>();
         for (List<String> names : nameLists) {
             KeyboardRow row = new KeyboardRow();
-            row.addAll(names);
+            List<KeyboardButton> buttons = createButtons(names);
+            row.addAll(buttons);
             keyboardRows.add(row);
         }
         ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(keyboardRows);
         markup.setSelective(true);
         markup.setResizeKeyboard(true);
         return markup;
+    }
+
+    private List<KeyboardButton> createButtons(List<String> names) {
+        return names.stream()
+                .map(name -> {
+                    if (isLocationButton(name)) {
+                        return createLocationButton(name);
+                    }
+                    return createRegularButton(name);
+                })
+                .toList();
+    }
+
+    private KeyboardButton createRegularButton(String name) {
+        KeyboardButton keyboardButton = new KeyboardButton();
+        keyboardButton.setText(name);
+        return keyboardButton;
+    }
+
+    private KeyboardButton createLocationButton(String name) {
+        KeyboardButton keyboardButton = new KeyboardButton();
+        keyboardButton.setText(name);
+        keyboardButton.setRequestLocation(true);
+        return keyboardButton;
     }
 
     private InlineKeyboardMarkup createInlineMarkup(List<Map<String, String>> namesLists) {
@@ -90,16 +116,10 @@ public class MessageService {
         return new InlineKeyboardMarkup(rows);
     }
 
-    public SendMessage testButton(Long id, String text, int messageId) {
-        SendMessage message = new SendMessage();
-        KeyboardButton keyboardButton = new KeyboardButton();
-        keyboardButton.setText("Location");
-        keyboardButton.setRequestLocation(true);
-        ReplyKeyboardMarkup markup = new ReplyKeyboardMarkup(List.of(new KeyboardRow(List.of(keyboardButton))));
-        message.setChatId(id.toString());
-        message.setText(text);
-        message.setReplyToMessageId(messageId);
-        message.setReplyMarkup(markup);
-        return message;
+    private boolean isLocationButton(String name) {
+        return languageService.getTexts("location")
+                .stream()
+                .anyMatch(text -> text.equals(name));
     }
+
 }

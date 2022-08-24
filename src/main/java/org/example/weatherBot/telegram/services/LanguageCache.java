@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class LanguageCache {
 
     private void addNew(Language language) {
         try {
-           Map<String, String> currentLanguage = new ObjectMapper().readValue(new File(FILE_TEMPLATE.formatted(language.toString().toLowerCase())),
+            Map<String, String> currentLanguage = new ObjectMapper().readValue(new File(FILE_TEMPLATE.formatted(language.toString().toLowerCase())),
                     new TypeReference<>() {
                     });
             languages.put(language, currentLanguage);
@@ -40,5 +41,12 @@ public class LanguageCache {
     public String getTitleByLanguageAndKey(Language language, String key) {
         String title = getLanguage(language).get(key);
         return title != null ? title : "";
+    }
+
+    public List<String> getTitlesByKey(String key) {
+        return Language.getAll()
+                .stream()
+                .map(language -> getTitleByLanguageAndKey(language, key))
+                .toList();
     }
 }

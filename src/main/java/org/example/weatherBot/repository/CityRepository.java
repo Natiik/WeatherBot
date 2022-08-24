@@ -13,4 +13,7 @@ public interface CityRepository extends JpaRepositoryImplementation<CityEntity, 
 
     @Query("select c from CityEntity c where c.id in (SELECT min(c1.id) from CityEntity c1 where c1.country=?1 group by c1.name)")
     List<CityEntity> findUniqueCitiesByCountry(String country);
+
+   @Query( "SELECT c FROM CityEntity c WHERE concat(c.lon, '') LIKE ?1 AND concat(c.lat,'') LIKE ?2 ")
+    List<CityEntity> findByLonAndLatIsContaining(String longitude, String latitude);
 }
